@@ -24,4 +24,9 @@ public class ValueAssignment<T> extends Assignment {
     public final T getValue() {
         return this.value;
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Assign ( %s ) -> %s", this.getValue(), this.getDestination());
+    }
 }

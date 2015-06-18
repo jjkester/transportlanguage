@@ -1,5 +1,6 @@
 package otld.otld.intermediate;
 
+import com.google.common.base.Joiner;
 import otld.otld.intermediate.exceptions.TypeMismatch;
 
 import java.util.Arrays;
@@ -47,5 +48,10 @@ public class Call extends Element {
      */
     public final Variable getVariable() {
         return this.args[this.args.length - 1];
+    }
+
+    @Override
+    public final String toString() {
+        return String.format("Call %s ( %s ) -> %s", this.getFunction(), Joiner.on(", ").join(this.getArgs()), this.getVariable());
     }
 }

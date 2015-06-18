@@ -123,4 +123,9 @@ public class Variable<T> extends Element implements TypedElement {
 
         return var;
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Variable %s", this.getId());
+    }
 }

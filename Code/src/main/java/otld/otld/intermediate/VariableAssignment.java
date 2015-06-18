@@ -30,4 +30,9 @@ public class VariableAssignment extends Assignment {
     public Variable getSource() {
         return this.source;
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Assign ( %s ) -> %s", this.getSource(), this.getDestination());
+    }
 }

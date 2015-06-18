@@ -12,5 +12,10 @@ public enum Type {
     CHAR,
     BOOLARR,
     INTARR,
-    CHARARR,
+    CHARARR,;
+
+    @Override
+    public final String toString() {
+        return String.format("Type %s", this.name());
+    }
 }

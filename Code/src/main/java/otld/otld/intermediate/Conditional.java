@@ -45,4 +45,9 @@ public class Conditional extends Element {
     public final Elements getBodyFalse() {
         return this.bodyFalse;
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Conditional ( %s )", this.getCondition());
+    }
 }

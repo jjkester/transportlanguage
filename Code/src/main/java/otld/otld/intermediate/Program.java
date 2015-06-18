@@ -77,4 +77,9 @@ public class Program {
         }
         this.functions.put(function.getId(), function);
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Program %s", this.getId());
+    }
 }

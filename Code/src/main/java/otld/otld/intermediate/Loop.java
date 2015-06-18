@@ -47,4 +47,9 @@ public class Loop extends Element {
     public final Elements getBody() {
         return this.body;
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Loop ( %s )", this.getCondition());
+    }
 }

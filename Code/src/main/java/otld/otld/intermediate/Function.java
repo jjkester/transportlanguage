@@ -1,5 +1,7 @@
 package otld.otld.intermediate;
 
+import com.google.common.base.Joiner;
+
 import java.util.Arrays;
 
 /**
@@ -67,5 +69,10 @@ public class Function extends Element implements TypedElement {
      */
     public final Type getType() {
         return this.args[this.args.length - 1];
+    }
+
+    @Override
+    public final String toString() {
+        return String.format("Function %s", this.getId());
     }
 }
