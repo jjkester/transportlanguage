@@ -3,7 +3,7 @@ package otld.otld.intermediate;
 /**
  * Assignment in the program.
  */
-public abstract class Assignment extends Element {
+public abstract class Assignment extends Operation {
     /** The variable to which the value is assigned. */
     private Variable destination;
 

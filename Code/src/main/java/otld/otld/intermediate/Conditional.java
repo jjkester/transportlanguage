@@ -6,7 +6,7 @@ package otld.otld.intermediate;
  * A conditional has two bodies, one for when the condition is true and one for when the condition is false. The
  * condition is a boolean variable.
  */
-public class Conditional extends Element {
+public class Conditional extends Block {
     /** The variable which determines which body to execute. */
     private Variable<Boolean> condition;
 

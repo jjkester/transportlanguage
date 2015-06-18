@@ -7,7 +7,7 @@ package otld.otld.intermediate;
  * The condition body is a piece of code which should set the condition and is run before every iteration and before the
  * condition variable is checked.
  */
-public class Loop extends Element {
+public class Loop extends Block {
     /** The variable which determines whether to execute the body or continue. */
     private Variable<Boolean> condition;
 

@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Function call in the program.
  */
-public class Call extends Element {
+public class Call extends Operation {
     /** The function that is called. */
     private Function function;
 
