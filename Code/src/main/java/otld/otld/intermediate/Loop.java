@@ -11,11 +11,11 @@ public class Loop extends Block {
     /** The variable which determines whether to execute the body or continue. */
     private Variable<Boolean> condition;
 
-    /** The elements which determine the value of the condition. */
-    private Elements conditionBody;
+    /** The operations which determine the value of the condition. */
+    private OperationSequence conditionBody;
 
     /** The body of the loop. */
-    private Elements body;
+    private OperationSequence body;
 
     /**
      * @param condition The variable which determines whether to execute the body or continue. The variable must be of
@@ -23,8 +23,8 @@ public class Loop extends Block {
      */
     public Loop(final Variable<Boolean> condition) {
         this.condition = condition;
-        this.conditionBody = new Elements();
-        this.body = new Elements();
+        this.conditionBody = new OperationSequence();
+        this.body = new OperationSequence();
     }
 
     /**
@@ -35,16 +35,16 @@ public class Loop extends Block {
     }
 
     /**
-     * @return The elements which determine the value of the condition.
+     * @return The operations which determine the value of the condition.
      */
-    public final Elements getConditionBody() {
+    public final OperationSequence getConditionBody() {
         return this.conditionBody;
     }
 
     /**
      * @return The body of the loop.
      */
-    public final Elements getBody() {
+    public final OperationSequence getBody() {
         return this.body;
     }
 

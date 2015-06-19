@@ -22,7 +22,9 @@ public class Program {
 
     /** The functions in this program indexed by identifier. */
     private Map<String, Function> functions;
-    private Elements body;
+
+    /** The operations that form the program. */
+    private OperationSequence body;
 
     /**
      * @param id The unique identifier of the program.

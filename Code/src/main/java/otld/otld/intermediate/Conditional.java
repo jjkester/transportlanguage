@@ -11,18 +11,18 @@ public class Conditional extends Block {
     private Variable<Boolean> condition;
 
     /** The body for when the condition is true. */
-    private Elements bodyTrue;
+    private OperationSequence bodyTrue;
 
     /** The body for when the condition is false. */
-    private Elements bodyFalse;
+    private OperationSequence bodyFalse;
 
     /**
      * @param condition The variable which determines which body to execute. The variable must be of the boolean type.
      */
     public Conditional(final Variable<Boolean> condition) {
         this.condition = condition;
-        this.bodyTrue = new Elements();
-        this.bodyFalse = new Elements();
+        this.bodyTrue = new OperationSequence();
+        this.bodyFalse = new OperationSequence();
     }
 
     /**
@@ -35,14 +35,14 @@ public class Conditional extends Block {
     /**
      * @return The body for when the condition is true.
      */
-    public final Elements getBodyTrue() {
+    public final OperationSequence getBodyTrue() {
         return this.bodyTrue;
     }
 
     /**
      * @return The body for when the condition is false.
      */
-    public final Elements getBodyFalse() {
+    public final OperationSequence getBodyFalse() {
         return this.bodyFalse;
     }
 

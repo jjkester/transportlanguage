@@ -1,7 +1,5 @@
 package otld.otld.intermediate;
 
-import com.google.common.base.Joiner;
-
 import java.util.Arrays;
 
 /**
@@ -16,8 +14,8 @@ public class Function extends Element implements TypedElement {
     /** The types of the arguments. The last argument is always the return type. */
     private Type[] args;
 
-    /** The elements that form the body of this function. */
-    private Elements body;
+    /** The operations that form the body of this function. */
+    private OperationSequence body;
 
     /**
      * @param id The unique identifier for this function.
@@ -34,6 +32,13 @@ public class Function extends Element implements TypedElement {
      */
     public final String getId() {
         return this.id;
+    }
+
+    /**
+     * @return The body of this function.
+     */
+    public final OperationSequence getBody() {
+        return this.body;
     }
 
     /**

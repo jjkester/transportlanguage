@@ -9,9 +9,9 @@ import java.util.List;
  *
  * An in-order sequence of elements that form a program.
  */
-public class Elements extends LinkedList<Element> {
+public class OperationSequence extends LinkedList<Operation> {
     @Override
     public final String toString() {
-        return String.format("Elements < %d >", this.size());
+        return String.format("OperationSequence < %d >", this.size());
     }
 }
