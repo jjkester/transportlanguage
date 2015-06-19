@@ -80,6 +80,13 @@ public class Program {
         this.functions.put(function.getId(), function);
     }
 
+    /**
+     * @return The body of the program.
+     */
+    public final OperationSequence getBody() {
+        return this.body;
+    }
+
     @Override
     public final String toString() {
         return String.format("Program %s", this.getId());

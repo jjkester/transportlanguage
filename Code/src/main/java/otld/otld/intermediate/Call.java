@@ -21,12 +21,12 @@ public class Call extends Operation {
      * @throws TypeMismatch The types of the argument variables are not compatible with the types of the function.
      */
     public Call(final Function function, final Variable ... args) throws TypeMismatch {
-        if (!function.validateInput(args)) {
-            throw new TypeMismatch();
-        }
-
         this.function = function;
         this.args = args;
+
+        if (!function.validateInput(this.getArgs()) || !function.getType().equals(this.getVariable().getType())) {
+            throw new TypeMismatch();
+        }
     }
 
     /**

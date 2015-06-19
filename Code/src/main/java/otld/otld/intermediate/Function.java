@@ -23,7 +23,8 @@ public class Function extends Element implements TypedElement {
      *             always the return type.
      */
     public Function(final String id, final Type... args) {
-        assert this.args.length >= 1;
+        assert args.length >= 1;
+        this.id = id;
         this.args = args;
     }
 
@@ -57,9 +58,10 @@ public class Function extends Element implements TypedElement {
                     return false;
                 }
             }
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
