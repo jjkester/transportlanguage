@@ -1,4 +1,7 @@
 package otld.otld.intermediate;
 
-public class Block extends Element {
+/**
+ * Base class that specializes Element for block statements.
+ */
+public abstract class Block extends Element {
 }
