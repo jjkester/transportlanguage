@@ -4,8 +4,6 @@ import com.google.common.base.Optional;
 import otld.otld.intermediate.exceptions.TypeMismatch;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import static otld.otld.intermediate.Type.*;
-
 /**
  * A variable in the program.
  *

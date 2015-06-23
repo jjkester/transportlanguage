@@ -24,7 +24,7 @@ public class Call extends Operation {
         this.function = function;
         this.args = args;
 
-        if (!function.validateInput(this.getArgs()) || !function.getType().equals(this.getVariable().getType())) {
+        if (!function.validateInput(this.getArgs()) || !function.getType().worksWith(this.getVariable().getType())) {
             throw new TypeMismatch();
         }
     }

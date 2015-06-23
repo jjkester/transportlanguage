@@ -54,7 +54,7 @@ public class Function extends Element implements TypedElement {
 
         if (args.length == input.length) {
             for (int i = 0; i < args.length; i++) {
-                if (!args[i].equals(input[i].getType())) {
+                if (!args[i].worksWith(input[i].getType())) {
                     return false;
                 }
             }

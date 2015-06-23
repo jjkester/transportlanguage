@@ -7,6 +7,7 @@ package otld.otld.intermediate;
  * behaviour.
  */
 public enum Type {
+    ANY,
     BOOL,
     INT,
     CHAR,
@@ -17,5 +18,9 @@ public enum Type {
     @Override
     public final String toString() {
         return String.format("Type %s", this.name());
+    }
+
+    public final boolean worksWith(final Type other) {
+        return this == other || this == Type.ANY || other == Type.ANY;
     }
 }
