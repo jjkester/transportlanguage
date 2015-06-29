@@ -6,36 +6,50 @@ program     : city depot* industry* track* company; //This is how a program shou
 city        : 'City'ID';';
 depot       : 'Begin''depot'';'(defwagon)*'End''depot'';';
 
-deftrain    : 'Train'ID'accepts'CARGO';'; //Shouldn't trains contain wagons?
+deftrain    : 'Train'ID'accepts'CARGO';';
 defwagon    : 'Wagon' ID 'accepts' CARGO ';';
 
 industry    : 'Begin' 'industry' ';' (factory)* 'End' 'industry' ';';
 
-deffactory  : 'Factory'ID'accepts'(CARGO',')*(CARGO)'produces'CARGO';';
-factory     : deffactory'Begin''production'';'Code*'Final product'ID';''End''production'';';
+factory     : 'Factory'ID'accepts'(CARGO',')*(CARGO)'produces'CARGO';'deffactory;
+deffactory  : 'Begin''production'';'Code+'Final product'ID';''End''production'';';
 
 track       : 'Begin''track'';'defsignal*defwaypoint*'End''track'';';
 
 defsignal   : 'Signal'ID'is'BOOLEAN';';
 defwaypoint : 'Waypoint' ID 'Begin' 'Waypoint' ';' code 'End' 'Waypoint' ';'; // define conditional
 
-// Main program rules
-code        : defcircle | ifcond | write;
-
-defcircle   : 'Begin' 'circle' ID ';' code 'Stop' ';' 'End' 'circle' ';'; // define execution code for conditional
-ifcond : 'Approach' 'signal' ID ';' ('Case' 'red' ':' code )? ('Case' 'green' ':' code )? 'Pass' 'signal' ';';
-
-write       : 'Write' '"' (CHARACTER|INTEGER)* '"' 'to' 'journal' ';'; //print statement
-
 company     : 'Begin''company'';'code'End''company'';'; // wraps main code
 
-// Tokens
+// Main program rules
+code        : defcircle | ifcond | write | transfer | transport | invert | unarymin;
 
+//Conditionals
+defcircle   : 'Begin' 'circle' ID ';' code 'Stop' ';' 'End' 'circle' ';'; // define execution code for conditional
+ifcond      : 'Approach' 'signal' ID ';' ('Case' BOOLEAN ':' code )+ 'Pass' 'signal' ';';
+
+//Execute statements
+write       : 'Write' STRING 'to' 'journal' ';'; //print statement
+
+//Assign statements
+load        : 'Load' INTEGER 'into' 'wagon' ID';';
+transfer    : 'Transfer' 'wagon' ID 'to' 'wagon' ID';';
+transport   : 'Transport' ID(','ID)* 'to' 'factory' (OP|ID) 'and' (('fully' 'load')|('set' 'signal')) ID';';
+invert      : 'Switch' 'signal' ID';';
+unarymin    : 'Turn' 'wagon' ID 'around'';';
+
+
+// Tokens
+BOOLEAN     : ('red' | 'green');
 CARGO       : ('int'|'boolean'|'char');
 INTEGER     : '-'?('0'|[1-9][0-9]*);
-BOOLEAN     : 'red' | 'green';
-ID          : [a-z]CHARACTER*;
-CHARACTER   : [a-zA-Z];
+STRING      : '"' [a-zA-Z0-9]* '"';
+CHARACTER   : '\''[a-zA-Z0-9]'\'';
+ID          : [a-z][a-zA-Z0-9]*;
+
+// All Operator Tokens
+OP          : 'add'|'substract'|'multiply'|'divide'|'modulo'|'complt'|'compgt'|'complte'|'compgte'|'compeq'|'and'|'or';
+
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;
