@@ -1,0 +1,38 @@
+City amsterdam;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+    Wagon c accepts int;
+End depot;
+
+Begin track;
+    Signal s is red;
+    Signal s2 is red;
+    Waypoint w;
+    Begin Waypoint;
+        Write "lol" to journal;
+    End Waypoint;
+End track;
+
+Begin industry;
+    Factory lol accepts int, char produces boolean;
+        Begin production;
+            Transport a, c to factory complt and set signal s;
+            Final product b;
+        End production;
+End industry;
+
+Begin company;
+    Transport b to factory lol and set signal s;
+
+    Begin circle w;
+        Approach signal s;
+            Case red: Stop;
+        Pass signal;
+    End circle;
+
+End company;
+
+
+
