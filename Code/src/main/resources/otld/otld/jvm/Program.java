@@ -1,38 +1,21 @@
+import java.util.Scanner;
+
 class Program {
-    int add(int a, int b) {
-        return a + b;
+    protected final void out(String out, Object ... args) {
+        System.out.println(String.format(out, args));
     }
-    int subtract(int a, int b) {
-        return a - b;
+    protected final Scanner in(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(prompt);
+        return scanner
     }
-    int multiply(int a, int b) {
-        return a * b;
+    protected final int readint(String prompt) {
+        return in(prompt).nextInt();
     }
-    int divide(int a, int b) {
-        return a / b;
+    protected final boolean readbool(String prompt) {
+        return in(prompt).nextBoolean();
     }
-    int modulo(int a, int b) {
-        return a % b;
-    }
-    boolean complt(int a, int b) {
-        return a < b;
-    }
-    boolean compgt(int a, int b) {
-        return a > b;
-    }
-    boolean complte(int a, int b) {
-        return a <= b;
-    }
-    boolean compgte(int a, int b) {
-        return a >= b;
-    }
-    boolean compeq(Object a, Object b) {
-        return a == b;
-    }
-    boolean and(boolean a, boolean b) {
-        return a && b;
-    }
-    boolean or(boolean a, boolean b) {
-        return a || b;
+    protected final char readchar(String prompt) {
+        return in(prompt).next('.').charAt(0);
     }
 }
