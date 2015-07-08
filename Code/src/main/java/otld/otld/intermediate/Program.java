@@ -32,6 +32,7 @@ public class Program {
         this.id = id;
         this.variables = new HashMap<String, Variable>();
         this.functions = new HashMap<String, Function>();
+        this.body = new OperationSequence();
     }
 
     /**
