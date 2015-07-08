@@ -42,7 +42,7 @@ public class JVMCompiler {
 
         try {
             final ClassReader reader = new ClassReader(JVMCompiler.class.getResourceAsStream(BASE_CLASS));
-            this.writer = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES);
+            this.writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
             this.visitor = checkCalls ? new CheckClassAdapter(this.writer) : this.writer;
             this.className = reader.getClassName();
         } catch (IOException e) {
@@ -75,7 +75,15 @@ public class JVMCompiler {
     protected void changeClass(final Program program) {
         // Set class name
         this.className = program.getId();
-        this.visitor.visit(Opcodes.V1_7, Opcodes.ACC_PUBLIC, this.className, null, "Object", null);
+        this.visitor.visit(Opcodes.V1_7, Opcodes.ACC_PUBLIC, this.className, null, "java/lang/Object", null);
+
+        final MethodVisitor constructorVisitor = this.visitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), null, null);
+        constructorVisitor.visitCode();
+        constructorVisitor.visitVarInsn(Opcodes.ALOAD, 0);
+        constructorVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false);
+        constructorVisitor.visitInsn(Opcodes.RETURN);
+        constructorVisitor.visitMaxs(10, 10);
+        constructorVisitor.visitEnd();
     }
 
     protected void addMainMethod(final Program program) {
@@ -86,7 +94,7 @@ public class JVMCompiler {
         // Put new instance in local variable and run main
         mainVisitor.visitTypeInsn(Opcodes.NEW, this.className);
         mainVisitor.visitInsn(Opcodes.DUP);
-        mainVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "Object", "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false);
+        mainVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, this.className, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), false);
         mainVisitor.visitInsn(Opcodes.DUP);
         mainVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, this.className, "main", Type.getMethodDescriptor(Type.VOID_TYPE), false);
         mainVisitor.visitInsn(Opcodes.RETURN);
@@ -275,7 +283,8 @@ public class JVMCompiler {
     protected void addBreakOperation(final MethodVisitor visitor, final Break breaks) {
         if (this.blocks.empty()) {
             // No blocks, so we are done, call System.exit()
-            visitor.visitMethodInsn(Opcodes.INVOKESTATIC, Type.getInternalName(System.class), "exit", Type.getMethodDescriptor(Type.VOID_TYPE), false);
+            visitor.visitInsn(Opcodes.ICONST_0);
+            visitor.visitMethodInsn(Opcodes.INVOKESTATIC, Type.getInternalName(System.class), "exit", Type.getMethodDescriptor(Type.VOID_TYPE, Type.INT_TYPE), false);
         } else {
             // Jump to the end label of the block
             visitor.visitJumpInsn(Opcodes.GOTO, this.endLabels.get(this.blocks.peek()));
