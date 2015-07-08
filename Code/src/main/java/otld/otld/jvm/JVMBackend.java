@@ -65,10 +65,14 @@ public class JVMBackend {
             this.addApplicationOperation(visitor, (Application) operation);
         } else if (operation instanceof Assignment) {
             this.addAssignmentOperation(visitor, (Assignment) operation);
+        } else if (operation instanceof Break) {
+            this.addBreakOperation(visitor, (Break) operation);
         } else if (operation instanceof Block) {
             this.addBlockOperation(visitor, (Block) operation);
         } else if (operation instanceof Call) {
             this.addCallOperation(visitor, (Call) operation);
+        } else if (operation instanceof Return) {
+            this.addReturnOperation(visitor, (Return) operation);
         } else {
             throw new NotImplementedException();
         }
@@ -101,6 +105,10 @@ public class JVMBackend {
         visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", assignment.getDestination().getId(), getASMType(assignment.getDestination().getType()).getDescriptor());
     }
 
+    protected void addBreakOperation(final MethodVisitor visitor, final Break breaks) {
+        throw new NotImplementedException();
+    }
+
     protected void addBlockOperation(final MethodVisitor visitor, final Block block) {
         throw new NotImplementedException();
     }
@@ -117,6 +125,10 @@ public class JVMBackend {
 
         // Write result to field
         visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", call.getVariable().getId(), getASMType(call.getVariable().getType()).getDescriptor());
+    }
+
+    protected void addReturnOperation(final MethodVisitor visitor, final Return returns) {
+        throw new NotImplementedException();
     }
 
     /**
