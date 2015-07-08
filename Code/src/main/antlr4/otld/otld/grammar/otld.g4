@@ -26,7 +26,8 @@ code        : defcircle | ifcond | write | stop | load | transfer | transport | 
 
 //Conditionals
 defcircle   : 'Begin' 'circle' ID ';' code 'End' 'circle' ';'; // define execution code for conditional
-ifcond      : 'Approach' 'signal' ID ';' ('Case' BOOLEAN ':' code )+ 'Pass' 'signal' ';';
+ifcond      : 'Approach' 'signal' ID ';' ifcondcase+ 'Pass' 'signal' ';';
+ifcondcase  : ('Case' BOOLEAN ':' code );
 
 //Execute statements
 write       : 'Write' STRING 'to' 'journal' ';'; //print statement

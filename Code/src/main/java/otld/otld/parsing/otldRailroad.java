@@ -20,6 +20,7 @@ public class otldRailroad extends otldBaseListener {
 
     private Program city;
     ParseTreeProperty<Function> functions;
+    ParseTreeProperty<Conditional> conditionals;
     Stack<OperationSequence> stack;
 
     public Type getType(String ctxType) {
@@ -59,12 +60,6 @@ public class otldRailroad extends otldBaseListener {
                 return Type.ANY;
         }
     }
-
-    @Override
-    public void enterProgram(otldParser.ProgramContext ctx) { super.enterProgram(ctx); }
-
-    @Override
-    public void exitProgram(otldParser.ProgramContext ctx) { super.exitProgram(ctx); }
 
     @Override
     public void enterCity(otldParser.CityContext ctx) {
@@ -201,4 +196,70 @@ public class otldRailroad extends otldBaseListener {
         stack.pop();
     }
 
+    @Override
+    public void enterIfcond(otldParser.IfcondContext ctx) {
+        Variable variable = city.getVariable(ctx.ID().getText());
+        if (variable != null) {
+            Conditional cond = new Conditional(variable);
+            for (otldParser.IfcondcaseContext c : ctx.ifcondcase()) {
+                conditionals.put(c, cond);
+            }
+        }
+    }
+
+    @Override
+    public void enterIfcondcase(otldParser.IfcondcaseContext ctx) {
+        Conditional conditional = conditionals.get(ctx);
+        switch (ctx.BOOLEAN().getText()) {
+            case "red" :
+                stack.push(conditional.getBodyFalse());
+                break;
+            case "green" :
+                stack.push(conditional.getBodyFalse());
+                break;
+            default :
+                System.out.println("Unknown boolean value");
+                //TODO error handling
+        }
+    }
+
+    @Override
+    public void exitIfcondcase(otldParser.IfcondcaseContext ctx) {
+        stack.pop();
+    }
+
+    @Override
+    public void enterStop(otldParser.StopContext ctx) {
+        stack.peek().add(new Break());
+    }
+
+    @Override
+    public void enterLoad(otldParser.LoadContext ctx) {
+        super.enterLoad(ctx);
+    }
+
+    @Override
+    public void exitLoad(otldParser.LoadContext ctx) {
+        super.exitLoad(ctx);
+    }
+
+    @Override
+    public void enterTransfer(otldParser.TransferContext ctx) {
+        super.enterTransfer(ctx);
+    }
+
+    @Override
+    public void exitTransfer(otldParser.TransferContext ctx) {
+        super.exitTransfer(ctx);
+    }
+
+    @Override
+    public void enterTransport(otldParser.TransportContext ctx) {
+        super.enterTransport(ctx);
+    }
+
+    @Override
+    public void exitTransport(otldParser.TransportContext ctx) {
+        super.exitTransport(ctx);
+    }
 }
