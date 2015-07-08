@@ -14,6 +14,9 @@ public class JVMBackend {
     /** The default base class for programs. */
     private static final String BASE_CLASS = "Program.class";
 
+    /** The local variable for the program. */
+    private static final int LV_PROGRAM = 0;
+
     public JVMBackend() {
         try {
             this.writer = new ClassWriter(new ClassReader(JVMBackend.class.getResourceAsStream(BASE_CLASS)), ClassWriter.COMPUTE_FRAMES);
@@ -50,7 +53,53 @@ public class JVMBackend {
      */
     protected void addMethod(final Function function) {
         MethodVisitor visitor = this.writer.visitMethod(Opcodes.ACC_PUBLIC, function.getId(), getASMMethodType(function.getType(), function.getArgs()).getDescriptor(), null, null);
-        // TODO Add function body
+
+        for (Operation op : function.getBody()) {
+            this.addOperation(visitor, op);
+        }
+    }
+
+    protected void addOperation(final MethodVisitor visitor, final Operation operation) {
+        if (operation instanceof Application) {
+            // TODO Function application
+        } else if (operation instanceof Assignment) {
+            final Assignment assignment = (Assignment) operation;
+
+            if (operation instanceof ValueAssignment) {
+                final ValueAssignment valueAssignment = (ValueAssignment) assignment;
+
+                // Put constant on stack
+                visitor.visitLdcInsn(valueAssignment.getValue());
+            } else if (operation instanceof VariableAssignment) {
+                final VariableAssignment variableAssignment = (VariableAssignment) assignment;
+
+                // Put object reference for field on stack
+                visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+                // Put source field value on stack
+                visitor.visitFieldInsn(Opcodes.GETFIELD, "Program", variableAssignment.getSource().getId(), getASMType(variableAssignment.getSource().getType()).getDescriptor());
+            }
+
+            // Put object reference for field on stack
+            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+            // Write value to field
+            visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", assignment.getDestination().getId(), getASMType(assignment.getDestination().getType()).getDescriptor());
+        } else if (operation instanceof Call) {
+            final Call call = (Call) operation;
+
+            // Put object reference for field on stack
+            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+            // Execute method and put result on stack.
+            visitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "Program", call.getFunction().getId(), getASMMethodType(call.getFunction().getType()).getDescriptor(), false);
+
+            // Put object reference for field on stack
+            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+            // Write result to field
+            visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", call.getVariable().getId(), getASMType(call.getVariable().getType()).getDescriptor());
+        }
     }
 
     /**
