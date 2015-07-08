@@ -26,6 +26,7 @@ public class Function extends Element implements TypedElement {
         assert args.length >= 1;
         this.id = id;
         this.args = args;
+        this.body = new OperationSequence();
     }
 
     /**
