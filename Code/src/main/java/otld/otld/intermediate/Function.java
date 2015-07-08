@@ -1,6 +1,7 @@
 package otld.otld.intermediate;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Function in the program.
@@ -14,6 +15,9 @@ public class Function extends Element implements TypedElement {
     /** The types of the arguments. The last argument is always the return type. */
     private Type[] args;
 
+    /** The variables for the function arguments. */
+    private Variable[] variables;
+
     /** The operations that form the body of this function. */
     private OperationSequence body;
 
@@ -26,6 +30,12 @@ public class Function extends Element implements TypedElement {
         assert args.length >= 1;
         this.id = id;
         this.args = args;
+        this.variables = new Variable[this.args.length - 1];
+        this.body = new OperationSequence();
+
+        for (int i = 0; i < this.variables.length; i++) {
+            this.variables[i] = new Variable(this.args[i], String.format("arg%d", i));
+        }
     }
 
     /**
@@ -65,7 +75,14 @@ public class Function extends Element implements TypedElement {
     }
 
     /**
-     * @return The types of the arguments for this function.
+     * @return The variables for the arguments of this function.
+     */
+    public final Variable[] getVariables() {
+        return this.variables;
+    }
+
+    /**
+     * @return The arguments for this function.
      */
     public final Type[] getArgs() {
         return Arrays.copyOf(this.args, this.args.length - 1);

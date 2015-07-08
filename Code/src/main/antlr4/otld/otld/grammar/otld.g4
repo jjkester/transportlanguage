@@ -17,12 +17,12 @@ deffactory  : 'Begin''production'';'code+'Final product'ID';''End''production'';
 track       : 'Begin''track'';'defsignal*defwaypoint*'End''track'';';
 
 defsignal   : 'Signal'ID'is'BOOLEAN';';
-defwaypoint : 'Waypoint' ID ';' 'Begin' 'Waypoint' ';' code 'End' 'Waypoint' ';'; // define conditional
+defwaypoint : 'Waypoint' ID ';' 'Begin' 'Waypoint' ';' code+ 'End' 'Waypoint' ';'; // define conditional
 
 company     : 'Begin''company'';'code*'End''company'';'; // wraps main code
 
 // Main program rules
-code        : defcircle | ifcond | write | stop | transfer | transport | invert | unarymin;
+code        : defcircle | ifcond | write | stop | load | transfer | transport | invert | unarymin;
 
 //Conditionals
 defcircle   : 'Begin' 'circle' ID ';' code 'End' 'circle' ';'; // define execution code for conditional
