@@ -3,6 +3,7 @@ package otld.otld.jvm;
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
 import otld.otld.intermediate.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ public class JVMBackend {
     protected void addOperation(final MethodVisitor visitor, final Operation operation) {
         if (operation instanceof Application) {
             // TODO Function application
+            throw new NotImplementedException();
         } else if (operation instanceof Assignment) {
             final Assignment assignment = (Assignment) operation;
 
@@ -99,6 +101,8 @@ public class JVMBackend {
 
             // Write result to field
             visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", call.getVariable().getId(), getASMType(call.getVariable().getType()).getDescriptor());
+        } else {
+            throw new NotImplementedException();
         }
     }
 
