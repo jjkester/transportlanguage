@@ -62,48 +62,61 @@ public class JVMBackend {
 
     protected void addOperation(final MethodVisitor visitor, final Operation operation) {
         if (operation instanceof Application) {
-            // TODO Function application
-            throw new NotImplementedException();
+            this.addApplicationOperation(visitor, (Application) operation);
         } else if (operation instanceof Assignment) {
-            final Assignment assignment = (Assignment) operation;
-
-            if (operation instanceof ValueAssignment) {
-                final ValueAssignment valueAssignment = (ValueAssignment) assignment;
-
-                // Put constant on stack
-                visitor.visitLdcInsn(valueAssignment.getValue());
-            } else if (operation instanceof VariableAssignment) {
-                final VariableAssignment variableAssignment = (VariableAssignment) assignment;
-
-                // Put object reference for field on stack
-                visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
-
-                // Put source field value on stack
-                visitor.visitFieldInsn(Opcodes.GETFIELD, "Program", variableAssignment.getSource().getId(), getASMType(variableAssignment.getSource().getType()).getDescriptor());
-            }
-
-            // Put object reference for field on stack
-            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
-
-            // Write value to field
-            visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", assignment.getDestination().getId(), getASMType(assignment.getDestination().getType()).getDescriptor());
+            this.addAssignmentOperation(visitor, (Assignment) operation);
+        } else if (operation instanceof Block) {
+            this.addBlockOperation(visitor, (Block) operation);
         } else if (operation instanceof Call) {
-            final Call call = (Call) operation;
-
-            // Put object reference for field on stack
-            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
-
-            // Execute method and put result on stack.
-            visitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "Program", call.getFunction().getId(), getASMMethodType(call.getFunction().getType()).getDescriptor(), false);
-
-            // Put object reference for field on stack
-            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
-
-            // Write result to field
-            visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", call.getVariable().getId(), getASMType(call.getVariable().getType()).getDescriptor());
+            this.addCallOperation(visitor, (Call) operation);
         } else {
             throw new NotImplementedException();
         }
+    }
+
+    protected void addApplicationOperation(final MethodVisitor visitor, final Application application) {
+        throw new NotImplementedException();
+    }
+
+    protected void addAssignmentOperation(final MethodVisitor visitor, final Assignment assignment) {
+        if (assignment instanceof ValueAssignment) {
+            final ValueAssignment valueAssignment = (ValueAssignment) assignment;
+
+            // Put constant on stack
+            visitor.visitLdcInsn(valueAssignment.getValue());
+        } else if (assignment instanceof VariableAssignment) {
+            final VariableAssignment variableAssignment = (VariableAssignment) assignment;
+
+            // Put object reference for field on stack
+            visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+            // Put source field value on stack
+            visitor.visitFieldInsn(Opcodes.GETFIELD, "Program", variableAssignment.getSource().getId(), getASMType(variableAssignment.getSource().getType()).getDescriptor());
+        }
+
+        // Put object reference for field on stack
+        visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+        // Write value to field
+        visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", assignment.getDestination().getId(), getASMType(assignment.getDestination().getType()).getDescriptor());
+    }
+
+    protected void addBlockOperation(final MethodVisitor visitor, final Block block) {
+        throw new NotImplementedException();
+    }
+
+    protected void addCallOperation(final MethodVisitor visitor, final Call call) {
+        // Put object reference for field on stack
+        visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+        // Execute method and put result on stack.
+        visitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "Program", call.getFunction().getId(), getASMMethodType(call.getFunction().getType()).getDescriptor(), false);
+
+        // Put object reference for field on stack
+        visitor.visitVarInsn(Opcodes.ALOAD, LV_PROGRAM);
+
+        // Write result to field
+        visitor.visitFieldInsn(Opcodes.PUTFIELD, "Program", call.getVariable().getId(), getASMType(call.getVariable().getType()).getDescriptor());
     }
 
     /**
