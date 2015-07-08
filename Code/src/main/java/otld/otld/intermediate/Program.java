@@ -4,7 +4,9 @@ import otld.otld.intermediate.exceptions.FunctionAlreadyDeclared;
 import otld.otld.intermediate.exceptions.VariableAlreadyDeclared;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a program.
@@ -85,6 +87,17 @@ public class Program {
      */
     public final OperationSequence getBody() {
         return this.body;
+    }
+
+    /**
+     * @return The variables in this program.
+     */
+    public Set<Variable> getVariables() {
+        return new HashSet<Variable>(this.variables.values());
+    }
+
+    public Set<Function> getFunctions() {
+        return new HashSet<Function>(this.functions.values());
     }
 
     @Override
