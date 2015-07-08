@@ -3,8 +3,7 @@ package otld.otld.intermediate;
 import otld.otld.intermediate.exceptions.FunctionAlreadyDeclared;
 import otld.otld.intermediate.exceptions.VariableAlreadyDeclared;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a program.
@@ -33,6 +32,28 @@ public class Program {
         this.id = id;
         this.variables = new HashMap<String, Variable>();
         this.functions = new HashMap<String, Function>();
+
+        for (Function function : getDefaultFunctions()) {
+            this.functions.put(function.getId(), function);
+        }
+    }
+
+    /**
+     * Returns the default functions for a program based on the available operators.
+     * @return The default functions for a program.
+     */
+    private static Set<Function> getDefaultFunctions() {
+        final Set<Function> functions = new HashSet<>();
+
+        for (Operator op : Operator.values()) {
+            final Type[] opArgs = op.getArgs();
+            final Type[] types = Arrays.copyOf(opArgs, opArgs.length + 1);
+            types[opArgs.length] = op.getType();
+
+            functions.add(new Function(op.name(), types));
+        }
+
+        return functions;
     }
 
     /**
