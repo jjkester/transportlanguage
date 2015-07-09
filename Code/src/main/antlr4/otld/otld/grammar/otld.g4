@@ -30,10 +30,10 @@ ifcond      : 'Approach' 'signal' ID ';' ('Case' BOOLEAN ':' code )+ 'Pass' 'sig
 
 //Execute statements
 write       : 'Write' STRING 'to' 'journal' ';'; //print statement
-stop        : STOP';';
+stop        : ' Stop'';';
 
 //Assign statements
-load        : 'Load' INTEGER 'into' 'wagon' ID';';
+load        : 'Load' (INTEGER|BOOLEAN|CHARACTER) 'into' 'wagon' ID';';
 transfer    : 'Transfer' 'wagon' ID 'to' 'wagon' ID';';
 transport   : 'Transport' ID(','ID)* 'to' 'factory' (OP|ID) 'and' (('fully' 'load')|('set' 'signal')) ID';';
 invert      : 'Switch' 'signal' ID';';
@@ -44,7 +44,6 @@ unarymin    : 'Turn' 'wagon' ID 'around'';';
 BOOLEAN     : ('red' | 'green');
 CARGO       : ('int'|'boolean'|'char');
 INTEGER     : '-'?('0'|[1-9][0-9]*);
-STOP        : 'Stop';
 STRING      : '"' ~["]* ('"' '"' ~["]*)* '"';
 CHARACTER   : '\''[a-zA-Z0-9]'\'';
 ID          : [a-z][a-zA-Z0-9]*;
