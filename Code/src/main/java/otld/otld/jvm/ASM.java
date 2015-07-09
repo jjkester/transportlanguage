@@ -28,22 +28,32 @@ public class ASM {
      * @return The ASM type.
      */
     public static Type getASMType(final otld.otld.intermediate.Type type) {
+        return Type.getType(typeAsClass(type));
+    }
+
+    /**
+     * Returns the equivalent Java class for the given intermediate type.
+     * @param type The intermediate type to get the class for.
+     * @return The Java class for the given intermediate type.
+     */
+    protected static Class typeAsClass(final otld.otld.intermediate.Type type) {
         switch (type) {
             case INT:
-                return Type.INT_TYPE;
+                return int.class;
             case BOOL:
-                return Type.BOOLEAN_TYPE;
+                return boolean.class;
             case CHAR:
-                return Type.CHAR_TYPE;
+                return char.class;
             case BOOLARR:
-                return Type.getType(boolean[].class);
+                return boolean[].class;
             case INTARR:
-                return Type.getType(int[].class);
+                return int[].class;
             case CHARARR:
-                return Type.getType(char[].class);
+                return char[].class;
             case ANY:
             default:
-                return Type.getType(Object.class);
+                // Fall back to integer primitive. Might go wrong, but this should not happen.
+                return int.class;
         }
     }
 }
