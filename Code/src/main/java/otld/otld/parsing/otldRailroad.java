@@ -1,5 +1,6 @@
 package otld.otld.parsing;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import otld.otld.grammar.otldBaseListener;
@@ -235,31 +236,144 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterLoad(otldParser.LoadContext ctx) {
-        super.enterLoad(ctx);
-    }
+        //TODO Array support is missing
+        //Get the previously defined variable
+        Variable var = city.getVariable(ctx.ID().getText());
+        //Check if it has been previously defined.
+        if (var != null) {
 
-    @Override
-    public void exitLoad(otldParser.LoadContext ctx) {
-        super.exitLoad(ctx);
+            if (ctx.INTEGER() != null) {
+                if (var.getType().equals(Type.INT)) {
+                    stack.peek().add(var.createValueAssignment(Integer.valueOf(ctx.INTEGER().getText())));
+                }
+            }
+
+            else if (ctx.BOOLEAN() != null) {
+                if (var.getType().equals(Type.BOOL)) {
+                    //Translate our green/red to true/false
+                    Boolean boolval = true;
+                    if (ctx.BOOLEAN().getText().equals("red")) {
+                        boolval = false;
+                    }
+                    stack.peek().add(var.createValueAssignment(boolval));
+                }
+            }
+
+            else if (ctx.CHARACTER() != null) {
+                if (var.getType().equals(Type.CHAR)) {
+                    stack.peek().add(var.createValueAssignment(ctx.CHARACTER().getText().charAt(0)));
+                }
+            }
+        }
+
     }
 
     @Override
     public void enterTransfer(otldParser.TransferContext ctx) {
-        super.enterTransfer(ctx);
-    }
+        //TODO implement for arrays
+        Variable var0 = city.getVariable(ctx.ID().get(0).getText());
+        Variable var1 = city.getVariable(ctx.ID().get(1).getText());
 
-    @Override
-    public void exitTransfer(otldParser.TransferContext ctx) {
-        super.exitTransfer(ctx);
+        if (var0 != null && var1 != null) {
+            try {
+                stack.peek().add(var1.createVariableAssignment(var0));
+            } catch (TypeMismatch typeMismatch) {
+                System.out.println("Type mismatch error!");
+                //TODO error handling
+            }
+        }
     }
 
     @Override
     public void enterTransport(otldParser.TransportContext ctx) {
-        super.enterTransport(ctx);
+        ArrayList<Type> vars = new ArrayList<>(ctx.ID().size());
+
+            //This means we have a predefined function
+            if (ctx.OP() != null) {
+                //Check if all of the provided arguments exist
+                for (TerminalNode node : ctx.ID()) {
+                    if (city.getVariable(node.getText()) == null) {
+                        System.out.println(node.getText() + " is null!");
+                        //TODO create a list of errors
+                    }
+                    vars.add(getType(node.getText()));
+                }
+
+                try {
+                    Application appl = new Application(Operator.valueOf(ctx.OP().getText()), (Variable[]) vars.toArray());
+                    stack.peek().add(appl);
+                } catch (TypeMismatch typeMismatch) {
+                    System.out.println("Type Mismatch!");
+                    //TODO error handling
+                }
+            }
+
+            //This means we have a custom function
+            if (ctx.OP() == null) {
+                //Remove the second to last argument since this is actually the function name
+                vars.remove(ctx.ID().size()-2);
+
+                //Check if all of the provided arguments exist
+                for (TerminalNode node : ctx.ID()) {
+                    if (city.getVariable(node.getText()) == null) {
+                        System.out.println(node.getText() + " is null!");
+                        //TODO create a list of errors
+                    }
+                    vars.add(getType(node.getText()));
+                }
+
+                Function func = city.getFunction(ctx.ID().get(ctx.ID().size()-2).getText());
+                //If the custom function exists then call it
+                if (func != null) {
+                    try {
+                        Call call = new Call(func, (Variable[]) vars.toArray());
+                        stack.peek().add(call);
+                    } catch (TypeMismatch typeMismatch) {
+                        System.out.println("Type Mismatch!");
+                        //TODO error handling
+                    }
+                } else {
+                    System.out.println("This Factory is undefined!");
+                    //TODO error handling
+                }
+            }
     }
 
     @Override
-    public void exitTransport(otldParser.TransportContext ctx) {
-        super.exitTransport(ctx);
+    public void enterInvert(otldParser.InvertContext ctx) {
+        Variable var = city.getVariable(ctx.ID().getText());
+
+        if (var != null) {
+            if (var.getType().equals(Type.BOOL)) {
+                try {
+                    Application apl = new Application(Operator.NOT, var, var);
+                    stack.peek().add(apl);
+                } catch (TypeMismatch typeMismatch) {
+                    System.out.println("Type mismatch!");
+                    //TODO error handling
+                }
+            } else {
+                System.out.println("Invert operation is not applicable for this type!");
+                //TODO error handling
+            }
+        } else {
+            System.out.println("This variable is undefined!");
+            //TODO error handling
+        }
+    }
+
+    @Override
+    public void enterUnarymin(otldParser.UnaryminContext ctx) {
+        Variable var = city.getVariable(ctx.ID().getText());
+
+        if (var != null) {
+            try {
+                Application appl = new Application(Operator.UMINUS, var, var);
+                stack.peek().add(appl);
+            } catch (TypeMismatch typeMismatch) {
+                System.out.println("Type mismatch!");
+                //TODO error handling
+            }
+        }
     }
 }
