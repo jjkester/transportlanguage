@@ -32,28 +32,7 @@ public class Program {
         this.id = id;
         this.variables = new HashMap<String, Variable>();
         this.functions = new HashMap<String, Function>();
-
-        for (Function function : getDefaultFunctions()) {
-            this.functions.put(function.getId(), function);
-        }
-    }
-
-    /**
-     * Returns the default functions for a program based on the available operators.
-     * @return The default functions for a program.
-     */
-    private static Set<Function> getDefaultFunctions() {
-        final Set<Function> functions = new HashSet<>();
-
-        for (Operator op : Operator.values()) {
-            final Type[] opArgs = op.getArgs();
-            final Type[] types = Arrays.copyOf(opArgs, opArgs.length + 1);
-            types[opArgs.length] = op.getType();
-
-            functions.add(new Function(op.name(), types));
-        }
-
-        return functions;
+        this.body = new OperationSequence();
     }
 
     /**
@@ -106,6 +85,17 @@ public class Program {
      */
     public final OperationSequence getBody() {
         return this.body;
+    }
+
+    /**
+     * @return The variables in this program.
+     */
+    public Set<Variable> getVariables() {
+        return new HashSet<Variable>(this.variables.values());
+    }
+
+    public Set<Function> getFunctions() {
+        return new HashSet<Function>(this.functions.values());
     }
 
     @Override

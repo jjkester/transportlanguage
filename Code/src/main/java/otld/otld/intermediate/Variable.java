@@ -65,6 +65,13 @@ public class Variable<T> extends Element implements TypedElement {
     }
 
     /**
+     * @return Whether this variable is a function argument.
+     */
+    public final boolean isFunctionArg() {
+        return this.id.matches("^\\d+$");
+    }
+
+    /**
      * Creates a new VariableAssignment with this variable as destination.
      *
      * @param source The source variable.
