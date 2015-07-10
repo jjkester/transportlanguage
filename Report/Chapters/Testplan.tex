@@ -1,1 +1,11 @@
 \chapter{Test plan}
+
+The Open Transport Language Deluxe compiler consists of three parts.
+We tested each part individually, while assuming that the other parts work as expected.
+Additionally, we tested the whole compiler using a test program which features almost all possible operations.
+
+We have used unit tests for the front end compiler and the intermediate representation.
+The back end compiler does not feature many automated testing since there are no easy tools for automatically inspecting the resulting bytecode.
+However, we wrote a unit test which compiles a program using all visitor methods on the back end compiler.
+Furthermore, the ASM class writer calls are checked by ASM for abnormalities while compiling this program.
+We also ran and inspected the resulting class file manually with \texttt{javap} and the IntelliJ decompiler.
