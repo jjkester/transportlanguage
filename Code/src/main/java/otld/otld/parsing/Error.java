@@ -1,50 +1,55 @@
 package otld.otld.parsing;
 
 /**
- * Error class that prints errors to the System.err log
+ * Error class that represents a parsing error
  */
 public class Error {
 
+    /** Line number of the error.*/
     private int line;
+    /** Position of the character in the line where the error occured.*/
     private int charpos;
+    /** Message that indicates what kind of error occurred. See ErrorMsg for common messages.*/
     private String message;
+    /** Symbol that caused the syntax error (if such an error occurred)*/
     private Character symbol;
 
+    /**
+     * Create an error object that is capable of returning a formatted error message
+     * based on the provided parameters.
+     * @param line
+     * @param charpos
+     * @param message
+     */
     public Error (int line, int charpos, String message) {
+        this(line, charpos, message, '\0');
+    }
+
+    /**
+     * Specialised constructor for SyntaxErrors, for other errors see the other constructor.
+     * @param line
+     * @param charpos
+     * @param message
+     * @param symbol
+     */
+    public Error (int line, int charpos, String message, Character symbol) {
         this.line = line;
         this.charpos = charpos;
         this.message = message;
-    }
-
-    public Error (int line, int charpos, String message, Character symbol) {
-        this(line, charpos, message);
         this.symbol = symbol;
     }
 
     /**
-     * Returns a formatted error message for the given parameters
+     * Returns a formatted error message for this class
      */
-    private String getError() {
+    public String getError() {
+        StringBuilder out = new StringBuilder();
+        out.append(String.format("Error at line:%d:%d: %s", line, charpos, message));
 
-        String print;
-
-        print = String.format(
-                "Error at line:%d:%d: %s",
-                line,
-                charpos,
-                message
-        );
-
-        if (message.startsWith(String.valueOf(ErrorMsg.SYNTAXERROR))) {
-            print = String.format(
-                    "Error at line:%d:%d: %s (Symbol %s)",
-                    line,
-                    charpos,
-                    message,
-                    symbol
-            );
+        if (this.symbol != '\0') {
+            out.append(String.format(" (Symbol %s)", symbol));
         }
 
-        return print;
+        return out.toString();
     }
 }

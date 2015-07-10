@@ -16,14 +16,13 @@ public class otldErrorListener extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+
         errors.add(
-                String.format(
-                        ":%d:%d: %s (Symbol %s)",
-                        line,
-                        charPositionInLine,
-                        msg,
-                        offendingSymbol.toString()
-                )
+                new Error(line,
+                          charPositionInLine,
+                          ErrorMsg.SYNTAXERROR.getMessage(),
+                          offendingSymbol.toString().charAt(0)
+                ).getError()
         );
     }
 
