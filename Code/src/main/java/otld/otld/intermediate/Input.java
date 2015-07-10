@@ -3,9 +3,9 @@ package otld.otld.intermediate;
 /**
  * Operation to get input from a user. Only accepts input in the correct type for the variable.
  */
-public class Input<T> extends Operation {
+public class Input extends Operation {
     /** The destination variable for the input. */
-    private Variable<T> destination;
+    private Variable destination;
 
     /** The query message to display. */
     private String query;
@@ -14,7 +14,7 @@ public class Input<T> extends Operation {
      * @param query The query message to display.
      * @param destination The destination variable for the input.
      */
-    public Input(final String query, final Variable<T> destination) {
+    public Input(final String query, final Variable destination) {
         this.query = query;
         this.destination = destination;
     }
@@ -29,7 +29,12 @@ public class Input<T> extends Operation {
     /**
      * @return The destination variable for the input.
      */
-    public final Variable<T> getDestination() {
+    public final Variable getDestination() {
         return this.destination;
+    }
+
+    @Override
+    public final String toString() {
+        return String.format("Input \"%s\" -> %s", this.getQuery(), this.getDestination());
     }
 }

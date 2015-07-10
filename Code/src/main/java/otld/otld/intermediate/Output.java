@@ -34,4 +34,9 @@ public class Output extends Operation {
     public final Variable getSource() {
         return this.source;
     }
+
+    @Override
+    public final String toString() {
+        return String.format("Output \"%s\", %s", this.getDescription(), this.getSource());
+    }
 }
