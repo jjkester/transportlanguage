@@ -107,6 +107,12 @@ public abstract class Compiler {
     protected abstract void visitFunction(final Function function);
 
     /**
+     * Visitor method for an input operation.
+     * @param input The input instance.
+     */
+    protected abstract void visitInput(final Input input);
+
+    /**
      * Visitor method for a loop block operation.
      * @param loop The loop instance.
      */
@@ -129,6 +135,12 @@ public abstract class Compiler {
      * @param operator The operator instance.
      */
     protected abstract void visitOperator(final Operator operator);
+
+    /**
+     * Visitor method for an output operation.
+     * @param output The output instance.
+     */
+    protected abstract void visitOutput(final Output output);
 
     /**
      * Visitor method for a program.
