@@ -234,8 +234,7 @@ public class BytecodeCompiler extends Compiler {
 
         // Put argument values on stack.
         for (Variable arg : call.getArgs()) {
-            this.methodVisitor.visitVarInsn(Opcodes.ALOAD, this.objectLocation);
-            this.methodVisitor.visitFieldInsn(Opcodes.GETFIELD, this.program.getId(), arg.getId(), ASM.getASMType(arg.getType()).getDescriptor());
+            this.visitLoadVariable(arg);
         }
 
         // Execute method and put result on stack
@@ -258,7 +257,7 @@ public class BytecodeCompiler extends Compiler {
         this.visitLoadVariable(conditional.getCondition());
 
         // Jump if condition is false
-        this.methodVisitor.visitJumpInsn(Opcodes.IFNE, labelFalse);
+        this.methodVisitor.visitJumpInsn(Opcodes.IFEQ, labelFalse);
 
         // Add 'true' body
         this.visitOperationSequence(conditional.getBodyTrue());
@@ -303,6 +302,48 @@ public class BytecodeCompiler extends Compiler {
     }
 
     @Override
+    protected void visitInput(Input input) {
+        // Create new scanner
+        this.methodVisitor.visitTypeInsn(Opcodes.NEW, "java/util/Scanner");
+        this.methodVisitor.visitInsn(Opcodes.DUP);
+
+        // Put reference to System.in on stack
+        this.methodVisitor.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;");
+
+        // Call constructor with argument
+        this.methodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/util/Scanner", "<init>", Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType("Ljava/io/InputStream;")), false);
+
+        // Print query
+        this.methodVisitor.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        this.methodVisitor.visitLdcInsn(input.getQuery());
+        this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(String.class)), false);
+
+        // Consume scanner and put input value on stack
+        switch (input.getDestination().getType()) {
+            case BOOL:
+                this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/util/Scanner", "nextBoolean", Type.getMethodDescriptor(Type.BOOLEAN_TYPE), false);
+                break;
+            case INT:
+                this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/util/Scanner", "nextInt", Type.getMethodDescriptor(Type.INT_TYPE), false);
+                break;
+            case CHAR:
+                // Put regex for a single char on the stack
+                this.methodVisitor.visitLdcInsn(".");
+                this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/util/Scanner", "next", Type.getMethodDescriptor(Type.getType(String.class)), false);
+
+                // Consume string result and put the first char on the stack
+                this.methodVisitor.visitIntInsn(Opcodes.SIPUSH, 0);
+                this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/String", "charAt", Type.getMethodDescriptor(Type.CHAR_TYPE, Type.INT_TYPE), false);
+                break;
+            default:
+                this.unsupported(input);
+        }
+
+        // Store input in variable
+        this.visitStoreVariable(input.getDestination());
+    }
+
+    @Override
     protected void visitLoop(Loop loop) {
         // Create labels for jumps
         final Label labelCond = new Label();
@@ -318,7 +359,7 @@ public class BytecodeCompiler extends Compiler {
         this.visitLoadVariable(loop.getCondition());
 
         // Jump to end if condition is false
-        this.methodVisitor.visitJumpInsn(Opcodes.IFNE, labelEnd);
+        this.methodVisitor.visitJumpInsn(Opcodes.IFEQ, labelEnd);
 
         // Add loop instructions
         this.visitOperationSequence(loop.getBody());
@@ -346,6 +387,10 @@ public class BytecodeCompiler extends Compiler {
             this.visitBlock((Block) operation);
         } else if (operation instanceof Call) {
             this.visitCall((Call) operation);
+        } else if (operation instanceof Input) {
+            this.visitInput((Input) operation);
+        } else if (operation instanceof Output) {
+            this.visitOutput((Output) operation);
         } else if (operation instanceof Return) {
             this.visitReturn((Return) operation);
         } else {
@@ -392,7 +437,10 @@ public class BytecodeCompiler extends Compiler {
                 this.methodVisitor.visitInsn(Opcodes.IXOR);
                 break;
             case NOT:
-                this.methodVisitor.visitInsn(Opcodes.INEG);
+                this.methodVisitor.visitIntInsn(Opcodes.SIPUSH, 1);
+                this.methodVisitor.visitInsn(Opcodes.IADD);
+                this.methodVisitor.visitIntInsn(Opcodes.SIPUSH, 2);
+                this.methodVisitor.visitInsn(Opcodes.IREM);
                 break;
             case COMPLTE:
             case COMPGTE:
@@ -445,6 +493,25 @@ public class BytecodeCompiler extends Compiler {
             default:
                 this.unsupported(operator);
         }
+    }
+
+    @Override
+    protected void visitOutput(Output output) {
+        // Put references to System.out on stack
+        this.methodVisitor.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        this.methodVisitor.visitInsn(Opcodes.DUP);
+
+        // Put string constant on stack
+        this.methodVisitor.visitLdcInsn(output.getDescription());
+
+        // Call print
+        this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(Object.class)), false);
+
+        // Put value on stack
+        this.visitLoadVariable(output.getSource());
+
+        // Call println
+        this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", Type.getMethodDescriptor(Type.VOID_TYPE, ASM.getASMType(output.getSource().getType())), false);
     }
 
     @Override

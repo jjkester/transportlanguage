@@ -44,61 +44,41 @@ public class BytecodeCompilerTest {
     @Test
     public void testProgram() throws Exception {
         // Define new program
-        Program program = new Program("Test");
+        Program program = new Program("Countdown");
 
-        // Add some variables
-        Variable<Integer> zero = Variable.create(Type.INT, "zero", "0");
-        Variable<Integer> one = Variable.create(Type.INT, "one", "1");
-        Variable<Integer> x = Variable.create(Type.INT, "x", "0");
-        Variable<Integer> y = Variable.create(Type.INT, "y", "0");
-        Variable<Integer> z = Variable.create(Type.INT, "z", "0");
-        Variable<Boolean> a = Variable.create(Type.BOOL, "a", "false");
-        Variable<Boolean> b = Variable.create(Type.BOOL, "b", "false");
-        program.addVariable(zero);
-        program.addVariable(one);
-        program.addVariable(x);
-        program.addVariable(y);
-        program.addVariable(z);
-        program.addVariable(a);
-        program.addVariable(b);
+        // Define variables
+        Variable var_i = Variable.create(Type.INT, "i", null);
+        Variable var_zero = Variable.create(Type.INT, "zero", "0");
+        Variable var_one = Variable.create(Type.INT, "one", "1");
+        Variable var_continue = Variable.create(Type.BOOL, "continue", null);
+        Variable var_stop = Variable.create(Type.BOOL, "stop", null);
+        program.addVariable(var_i);
+        program.addVariable(var_zero);
+        program.addVariable(var_one);
+        program.addVariable(var_continue);
+        program.addVariable(var_stop);
 
-        // Define new function
-        Function fib = new Function("fib", Type.INT, Type.INT);
-        program.addFunction(fib);
+        // Define function
+        Function func_count = new Function("count", Type.INT, Type.INT);
+        program.addFunction(func_count);
 
-        // Build new function body (fib)
-        Function isZero = new Function("is0", Type.INT, Type.BOOL);
-        program.addFunction(isZero);
-        isZero.getBody().add(new Application(Operator.EQUALS, isZero.getVariables()[0], zero, a));
-        isZero.getBody().add(new Return(a));
+        func_count.getBody().add(new Output("", func_count.getVariables()[0]));
+        func_count.getBody().add(new Return(var_zero));
 
-        Function isOne = new Function("is1", Type.INT, Type.BOOL);
-        program.addFunction(isOne);
-        isOne.getBody().add(new Application(Operator.EQUALS, isOne.getVariables()[0], one, b));
-        isOne.getBody().add(new Return(b));
-
-        Conditional ifZero = new Conditional(a);
-        Conditional ifOne = new Conditional(b);
-
-        ifOne.getBodyTrue().add(new Return(one));
-
-        ifOne.getBodyFalse().add(new Application(Operator.SUBTRACTION, fib.getVariables()[0], one, z));
-        ifOne.getBodyFalse().add(new Call(fib, z, x));
-        ifOne.getBodyFalse().add(new Application(Operator.SUBTRACTION, z, one, z));
-        ifOne.getBodyFalse().add(new Call(fib, z, y));
-        ifOne.getBodyFalse().add(new Application(Operator.ADDITION, x, y, z));
-        ifOne.getBodyFalse().add(new Return(z));
-
-        ifZero.getBodyFalse().add(new Call(isOne, fib.getVariables()[0], b));
-        ifZero.getBodyFalse().add(ifOne);
-
-        fib.getBody().add(new Call(isZero, fib.getVariables()[0], a));
-        fib.getBody().add(ifZero);
-        fib.getBody().add(new Return(zero));
-
-        // Main body (calculate 10th fibonacci number)
-        program.getBody().add(z.createValueAssignment(10));
-        program.getBody().add(new Call(fib, z, z));
+        program.getBody().add(new Input("Count down from <int>: ", var_i));
+        program.getBody().add(new Input("Stop at zero? <boolean>: ", var_stop));
+        Application appl_stop = new Application(Operator.NOT, var_stop, var_stop);
+        Application appl_continue = new Application(Operator.COMPGTE, var_i, var_zero, var_continue);
+        Application appl_continue2 = new Application(Operator.OR, var_continue, var_stop, var_continue);
+        program.getBody().add(appl_stop);
+        program.getBody().add(appl_continue);
+        program.getBody().add(appl_continue2);
+        Loop loop_j = new Loop(var_continue);
+        loop_j.getBody().add(new Call(func_count, var_i, var_zero));
+        loop_j.getBody().add(new Application(Operator.SUBTRACTION, var_i, var_one, var_i));
+        loop_j.getBody().add(appl_continue);
+        loop_j.getBody().add(appl_continue2);
+        program.getBody().add(loop_j);
 
         // Compile program
         // Tests for exceptions
