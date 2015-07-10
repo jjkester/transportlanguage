@@ -34,7 +34,7 @@ public class Function extends Element implements TypedElement {
         this.body = new OperationSequence();
 
         for (int i = 0; i < this.variables.length; i++) {
-            this.variables[i] = new Variable(this.args[i], String.format("%d", i));
+            this.variables[i] = new Variable(this.args[i], String.format("var%d", i + 1));
         }
     }
 
