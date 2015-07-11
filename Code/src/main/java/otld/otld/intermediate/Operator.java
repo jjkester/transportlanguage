@@ -20,13 +20,14 @@ public enum Operator implements TypedElement {
 
     AND     ("&&", Type.BOOL, Type.BOOL, Type.BOOL),
     OR      ("||", Type.BOOL, Type.BOOL, Type.BOOL),
-    NOT     ("!", Type.BOOL, Type.BOOL, Type.BOOL),
+    NOT     ("!", Type.BOOL, Type.BOOL),
     COMPLTE ("<=", Type.INT, Type.INT, Type.BOOL),
     COMPGTE (">=", Type.INT, Type.INT, Type.BOOL),
     COMPLT  ("<", Type.INT, Type.INT, Type.BOOL),
     COMPGT  (">", Type.INT, Type.INT, Type.BOOL),
 
-    EQUALS  ("==", Type.ANY, Type.ANY, Type.BOOL);
+    EQUALS  ("==", Type.ANY, Type.ANY, Type.BOOL),
+    NEQUALS ("!=", Type.ANY, Type.ANY, Type.BOOL);
 
     /** Symbol representation of this operator. */
     private final String symbol;
