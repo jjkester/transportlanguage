@@ -30,8 +30,8 @@ ifcond      : 'Approach' 'signal' ID ';' ifcondcase+ 'Pass' 'signal' ';';
 ifcondcase  : ('Case' BOOLEAN ':' code );
 
 //Execute statements
-input       : 'Ask control for' ('contents of' ID)|('status of' ID)';';
-write       : 'Write' STRING 'to' 'journal' ';'; //print statement
+input       : 'Ask control' STRING 'about' ('contents of' ID)|('status of' ID)';';
+write       : 'Write' STRING ID 'to' 'journal' ';'; //print statement
 stop        : ' Stop'';';
 
 //Assign statements
