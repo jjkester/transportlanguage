@@ -25,11 +25,12 @@ company     : 'Begin''company'';'code*'End''company'';'; // wraps main code
 code        : defcircle | ifcond | write | stop | load | transfer | transport | invert | unarymin;
 
 //Conditionals
-defcircle   : 'Begin' 'circle' ID ';' code 'End' 'circle' ';'; // define execution code for conditional
+defcircle   : 'Begin' 'circle' ID ';' code+ 'End' 'circle' ';'; // define execution code for conditional
 ifcond      : 'Approach' 'signal' ID ';' ifcondcase+ 'Pass' 'signal' ';';
 ifcondcase  : ('Case' BOOLEAN ':' code );
 
 //Execute statements
+input       : 'Ask control for' ('contents of' ID)|('status of' ID)';';
 write       : 'Write' STRING 'to' 'journal' ';'; //print statement
 stop        : ' Stop'';';
 
