@@ -122,7 +122,8 @@ public class BytecodeCompiler extends Compiler {
 
     /**
      * Visitor method for when a variable value is needed on the stack.
-     * Writes instructions that push the value of the variable to the top of the stack.
+     * Writes instructions that put the value of the variable to the top of the stack.
+     *
      * @param variable The variable to load.
      */
     protected void visitLoadVariable(final Variable variable) {
@@ -150,7 +151,8 @@ public class BytecodeCompiler extends Compiler {
 
     /**
      * Visitor method for when a value must be stored in a variable.
-     * Writes instructions that push the value of the variable to the top of the stack.
+     * Writes instructions that store the value on top of the stack to the given variable.
+     *
      * @param variable The variable to write.
      */
     protected void visitStoreVariable(final Variable variable) {
@@ -177,6 +179,14 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles operator application.
+     *
+     * Writes operations for putting the argument values on the stack and storing the result into the destination
+     * variable. Calls the operator visitor method to write the code for the actual operation.
+     *
+     * @param application The application instance.
+     */
     @Override
     protected void visitApplication(final Application application) {
         // Load argument values onto stack
@@ -191,6 +201,15 @@ public class BytecodeCompiler extends Compiler {
         this.visitStoreVariable(application.getVariable());
     }
 
+    /**
+     * Handles assignments.
+     *
+     * Calls the correct visitor for the specific type of assignment or raises an exception in case the type of
+     * assignment is not supported by this compiler.
+     *
+     * @param assignment The assignment instance.
+     * @throws UnsupportedOperationException The specific assignment is not supported.
+     */
     @Override
     protected void visitAssignment(final Assignment assignment) {
         // Forward call to specialized visitor
@@ -203,6 +222,15 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles blocks.
+     *
+     * Calls the correct visitor for the specific type of block or raises an exception in case the type of block is not
+     * supported by this compiler.
+     *
+     * @param block The block instance.
+     * @throws UnsupportedOperationException The specific block is not supported.
+     */
     @Override
     protected void visitBlock(final Block block) {
         // Forward call to specialized visitor
@@ -215,6 +243,14 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles a break.
+     *
+     * Looks up the end label for the current block. Writes a jump to this end label.
+     * Writes a void return in case there is no current block to end a method.
+     *
+     * @param brake The break instance.
+     */
     @Override
     protected void visitBreak(Break brake) {
         // Check if there is a block to break out of
@@ -227,6 +263,14 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles a function call.
+     *
+     * Writes instructions to put the values of the arguments on the stack, to invoke the method, and to store the
+     * result in a variable.
+     *
+     * @param call The call instance.
+     */
     @Override
     protected void visitCall(Call call) {
         // Put object reference for field on stack
@@ -244,6 +288,17 @@ public class BytecodeCompiler extends Compiler {
         this.visitStoreVariable(call.getVariable());
     }
 
+    /**
+     * Handles a conditional statement.
+     *
+     * Creates two new labels, one for the 'false' part of the conditon, one for the 'end' of the condition.
+     * Sets and unsets the break target so the break statement points to the correct end label.
+     *
+     * Writes bytecode for jumping to the false label in case the condition is false. Calls the visitor method for the
+     * two bodies, and writes the labels and jumps on the correct places.
+     *
+     * @param conditional The conditional instance.
+     */
     @Override
     protected void visitConditional(Conditional conditional) {
         // Create labels for jumps
@@ -278,6 +333,13 @@ public class BytecodeCompiler extends Compiler {
         this.breakTargets.pop();
     }
 
+    /**
+     * Handles a function definition.
+     *
+     * Adds a method to the class with the name of the function. Calls the visitor method for the function body.
+     *
+     * @param function The function instance.
+     */
     @Override
     protected void visitFunction(Function function) {
         // Set variable locations
@@ -301,6 +363,14 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitEnd();
     }
 
+    /**
+     * Handles user input.
+     *
+     * Writes bytecode for a prompt and a scanner to read the user inputted data and store it into the target variable.
+     * Does not write bytecode for handling invalid input, but instead relies on the exceptions raised by the Scanner.
+     *
+     * @param input The input instance.
+     */
     @Override
     protected void visitInput(Input input) {
         // Create new scanner
@@ -343,6 +413,17 @@ public class BytecodeCompiler extends Compiler {
         this.visitStoreVariable(input.getDestination());
     }
 
+    /**
+     * Handles a loop.
+     *
+     * Creates and writes labels for the loop condition and the end of the loop.
+     * Sets and unsets the break target label.
+     *
+     * Writes bytecode for evaluating the condition and jumping accordingly. Writes a jump to the condition label at the
+     * end of the loop body. Calls the visitor method for the loop body.
+     *
+     * @param loop The loop instance.
+     */
     @Override
     protected void visitLoop(Loop loop) {
         // Create labels for jumps
@@ -374,6 +455,15 @@ public class BytecodeCompiler extends Compiler {
         this.breakTargets.pop();
     }
 
+    /**
+     * Handles an operation.
+     *
+     * Calls the appropriate visitor method for each type of operation. Throws an exception in case a specific operation
+     * is not supported.
+     *
+     * @param operation The operation instance.
+     * @throws UnsupportedOperationException The specific operation is not supported.
+     */
     @Override
     protected void visitOperation(Operation operation) {
         // Forward call to specialized visitor
@@ -398,6 +488,13 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles a sequence of operations.
+     *
+     * Calls the operation visitor method for every operation in the sequence.
+     *
+     * @param sequence The operation sequence instance.
+     */
     @Override
     protected void visitOperationSequence(OperationSequence sequence) {
         // Visit all operations in the sequence.
@@ -406,6 +503,15 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles an operator.
+     *
+     * Writes bytecode for specific operations. Assumes that the values to use with this operation are already on the
+     * stack. Throws an exception in case an operator is not supported.
+     *
+     * @param operator The operator instance.
+     * @throws UnsupportedOperationException The specific operator is not supported.
+     */
     @Override
     protected void visitOperator(Operator operator) {
         // Write the correct opcode for the operator
@@ -495,6 +601,13 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles user output.
+     *
+     * Writes bytecode for printing a string and the value of a variable.
+     *
+     * @param output The output instance.
+     */
     @Override
     protected void visitOutput(Output output) {
         // Put references to System.out on stack
@@ -514,6 +627,14 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", Type.getMethodDescriptor(Type.VOID_TYPE, ASM.getASMType(output.getSource().getType())), false);
     }
 
+    /**
+     * Handles a program.
+     *
+     * Creates a class for the program. Creates a constructor and main method. Writes bytecode for setting initial
+     * values in the constructor if needed. Writes bytecode for creating a new instance of the class in the main method.
+     *
+     * @param program The program instance.
+     */
     @Override
     protected void visitProgram(Program program) {
         // Create new class
@@ -536,6 +657,11 @@ public class BytecodeCompiler extends Compiler {
         this.visitProgramMain(program);
     }
 
+    /**
+     * Creates the constructor for the program class. Sets initial values for the fields if needed.
+     *
+     * @param program The program to create a constructor for.
+     */
     protected void visitProgramConstructor(final Program program) {
         // Add class constructor
         this.methodVisitor = this.visitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", Type.getMethodDescriptor(Type.VOID_TYPE), null, null);
@@ -559,6 +685,11 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitEnd();
     }
 
+    /**
+     * Creates a static main method for the program class.
+     *
+     * @param program The program to create a main method for.
+     */
     protected void visitProgramMain(final Program program) {
         // Store current object location
         final int oldObjectLocation = this.objectLocation;
@@ -594,6 +725,15 @@ public class BytecodeCompiler extends Compiler {
         this.objectLocation = oldObjectLocation;
     }
 
+    /**
+     * Handles a function return.
+     *
+     * Writes bytecode to put the source variable on the stack and to return this value. Throws an exception if a return
+     * for a specific type is not supported.
+     *
+     * @param returm The return instance.
+     * @throws UnsupportedOperationException The specific return type is not supported.
+     */
     @Override
     protected void visitReturn(Return returm) {
         // Load value onto stack
@@ -611,6 +751,13 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles the assignment of a value.
+     *
+     * Writes bytecode to put the value on the stack and to write the value to a variable.
+     *
+     * @param assignment The value assignment instance.
+     */
     @Override
     protected void visitValueAssignment(ValueAssignment assignment) {
         // Put value on stack for different types
@@ -632,6 +779,13 @@ public class BytecodeCompiler extends Compiler {
         this.visitStoreVariable(assignment.getDestination());
     }
 
+    /**
+     * Handles variable definition.
+     *
+     * Adds a field for the variable. Adds a variable to the list of variables with an initial value if necessary.
+     *
+     * @param variable The variable instance.
+     */
     @Override
     protected void visitVariable(Variable variable) {
         // Add field for the variable
@@ -643,6 +797,14 @@ public class BytecodeCompiler extends Compiler {
         }
     }
 
+    /**
+     * Handles the assignment of another variable.
+     *
+     * Writes bytecode to put the value of the source variable on the stack and to store the value to the target
+     * variable.
+     *
+     * @param assignment The variable assignment instance.
+     */
     @Override
     protected void visitVariableAssignment(VariableAssignment assignment) {
         // Load value of source variable
@@ -654,7 +816,8 @@ public class BytecodeCompiler extends Compiler {
 
     /**
      * Visitor for an integer constant.
-     * Writes code which puts the constant to the stack.
+     * Writes bytecode to put the constant on the stack.
+     *
      * @param value The value to put on the stack.
      */
     protected void visitIntConst(int value) {
