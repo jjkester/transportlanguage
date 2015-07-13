@@ -5,4 +5,9 @@ package otld.otld.intermediate;
  */
 public class Break extends Operation {
     public Break() {}
+
+    @Override
+    public final String toString() {
+        return "Break";
+    }
 }
