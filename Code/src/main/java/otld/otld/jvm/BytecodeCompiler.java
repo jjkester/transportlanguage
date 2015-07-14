@@ -355,6 +355,9 @@ public class BytecodeCompiler extends Compiler {
         // Place condition label
         this.methodVisitor.visitLabel(labelCond);
 
+        // Execute condition body
+        this.visitOperationSequence(loop.getConditionBody());
+
         // Load condition onto stack
         this.visitLoadVariable(loop.getCondition());
 
