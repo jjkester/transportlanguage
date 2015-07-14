@@ -30,11 +30,12 @@ public class Function extends Element implements TypedElement {
         assert args.length >= 1;
         this.id = id;
         this.args = args;
-        this.variables = new Variable[this.args.length - 1];
+        this.variables = new Variable[this.args.length];
         this.body = new OperationSequence();
 
         for (int i = 0; i < this.variables.length; i++) {
-            this.variables[i] = new Variable(this.args[i], String.format("var%d", i + 1));
+            String name = i == this.variables.length - 1 ? "var%d_ret" : "var%d";
+            this.variables[i] = new Variable(this.args[i], String.format(name, i + 1));
         }
     }
 
