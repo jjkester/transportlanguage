@@ -11,6 +11,7 @@ import otld.otld.intermediate.exceptions.TypeMismatch;
 import otld.otld.intermediate.exceptions.VariableAlreadyDeclared;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -38,6 +39,16 @@ public class otldRailroad extends otldBaseListener {
      * A sorted list of errors encountered during parsing.
      */
     SortedList<Error> errors;
+
+    /**
+     * A map that maps operation sequences to waypoints.
+     */
+    Map<Variable, OperationSequence> waypoints;
+
+    /**
+     * The last function we encountered during parsing, this is nulled after each factory exit.
+     */
+    Function lastFunction = null;
 
     /**
      * Returns the system type of that is identified by the passed string.
@@ -71,6 +82,33 @@ public class otldRailroad extends otldBaseListener {
         }
     }
 
+    /**
+     * Returns a variable assigned with the passed id if one is declared.
+     * If the code requesting the variable is inside a factory body a platform
+     * can be returned as well.
+     * <p>
+     * All other cases return {@code null};
+     * </p>
+     * @param id
+     * @return requestedVariable
+     */
+    public Variable getVariable(String id) {
+        Variable returnVar = null;
+        if (id.startsWith("platform")) {
+            if (lastFunction != null) {
+                int index = Integer.parseInt(id.substring(7));
+                Variable[] platforms = lastFunction.getVariables();
+
+                if (index < platforms.length) {
+                    returnVar = platforms[index];
+                }
+            }
+        } else {
+            returnVar = city.getVariable(id);
+        }
+        return returnVar;
+    }
+
     @Override
     public void enterCity(otldParser.CityContext ctx) {
         city = new Program(ctx.ID().getText());
@@ -86,58 +124,77 @@ public class otldRailroad extends otldBaseListener {
     public void enterDeftrain(otldParser.DeftrainContext ctx) {
         /*Train represents an array, arrays are as of yet still unsupported in our intermediate representation so this
         code isn't used.*/
-        try {
-            city.addVariable(Variable.create(getArrType(ctx.CARGO().getText()), ctx.ID().getText(), null));
-        } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+        if (!ctx.ID().getText().startsWith("platform")) {
+            try {
+                city.addVariable(Variable.create(getArrType(ctx.CARGO().getText()), ctx.ID().getText(), null));
+            } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+                errors.add(new Error(ctx.ID().getSymbol().getLine(),
+                        ctx.ID().getSymbol().getCharPositionInLine(),
+                        ErrorMsg.VARALREADYDEFINED.getMessage()));
+            }
+        } else {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.VARALREADYDEFINED.getMessage()));
+                    ErrorMsg.RESERVEDNAME.getMessage()));
         }
-
     }
 
     @Override
     public void enterDefwagon(otldParser.DefwagonContext ctx) {
-        try {
-            Type type = getType(ctx.CARGO().getText());
+        if (!ctx.ID().getText().startsWith("platform")) {
+            try {
+                Type type = getType(ctx.CARGO().getText());
 
-            if (type != null) {
-                city.addVariable(Variable.create(type, ctx.ID().getText(), null));
-            } else {
-                errors.add(new Error(ctx.CARGO().getSymbol().getLine(),
-                        ctx.CARGO().getSymbol().getCharPositionInLine(),
-                        ErrorMsg.TYPENOTDEFINED.getMessage()));
+                if (type != null) {
+                    city.addVariable(Variable.create(type, ctx.ID().getText(), null));
+                } else {
+                    errors.add(new Error(ctx.CARGO().getSymbol().getLine(),
+                            ctx.CARGO().getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPENOTDEFINED.getMessage()));
+                }
+            } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+                errors.add(new Error(ctx.ID().getSymbol().getLine(),
+                        ctx.ID().getSymbol().getCharPositionInLine(),
+                        ErrorMsg.VARALREADYDEFINED.getMessage()));
             }
-        } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+        } else {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.VARALREADYDEFINED.getMessage()));
+                    ErrorMsg.RESERVEDNAME.getMessage()));
         }
     }
 
     @Override
     public void enterFactory(otldParser.FactoryContext ctx) {
-        ArrayList<Type> types = new ArrayList<>(ctx.CARGO().size());
-        for (TerminalNode n : ctx.CARGO()) {
-            Type type = getType(n.getText());
+        if (!ctx.ID().getText().startsWith("platform")) {
+            ArrayList<Type> types = new ArrayList<>(ctx.CARGO().size());
+            for (TerminalNode n : ctx.CARGO()) {
+                Type type = getType(n.getText());
 
-            if (type != null) {
-                types.add(type);
-            } else {
-                errors.add(new Error(ctx.CARGO().get(ctx.CARGO().indexOf(n)).getSymbol().getLine(),
-                        ctx.CARGO().get(ctx.CARGO().indexOf(n)).getSymbol().getCharPositionInLine(),
-                        ErrorMsg.TYPENOTDEFINED.getMessage()));
+                if (type != null) {
+                    types.add(type);
+                } else {
+                    errors.add(new Error(ctx.CARGO().get(ctx.CARGO().indexOf(n)).getSymbol().getLine(),
+                            ctx.CARGO().get(ctx.CARGO().indexOf(n)).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPENOTDEFINED.getMessage()));
+                }
             }
-        }
 
-        try {
-            Function function = new Function(ctx.ID().getText(), (Type[]) types.toArray());
-            city.addFunction(function);
-            functions.put(ctx.deffactory(), function);
-        } catch (FunctionAlreadyDeclared functionAlreadyDeclared) {
+            try {
+                Function function = new Function(ctx.ID().getText(), (Type[]) types.toArray());
+                city.addFunction(function);
+                functions.put(ctx.deffactory(), function);
+                //Set the lastFunction to this so code that is part of the factory body can access it's platforms
+                lastFunction = function;
+            } catch (FunctionAlreadyDeclared functionAlreadyDeclared) {
+                errors.add(new Error(ctx.ID().getSymbol().getLine(),
+                        ctx.ID().getSymbol().getCharPositionInLine(),
+                        ErrorMsg.FACTALREADYDEFINED.getMessage()));
+            }
+        } else {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.FACTALREADYDEFINED.getMessage()));
+                    ErrorMsg.RESERVEDNAME.getMessage()));
         }
     }
 
@@ -150,8 +207,8 @@ public class otldRailroad extends otldBaseListener {
     @Override
     public void exitDeffactory(otldParser.DeffactoryContext ctx) {
         Return ret;
-        if (city.getVariable(ctx.ID().getText()) != null) {
-            ret = new Return(city.getVariable(ctx.ID().getText()));
+        if (getVariable(ctx.ID().getText()) != null) {
+            ret = new Return(getVariable(ctx.ID().getText()));
             if (functions.get(ctx).getType().equals(ret.getSource().getType())) {
                 stack.peek().add(ret);
             } else {
@@ -166,73 +223,68 @@ public class otldRailroad extends otldBaseListener {
         }
 
         stack.pop();
+        //Reset the lastFunction to null so other parts of the code cannot access platforms
+        lastFunction = null;
     }
 
     @Override
     public void enterDefsignal(otldParser.DefsignalContext ctx) {
-        try {
-            city.addVariable(Variable.create(Type.BOOL, ctx.ID().getText(), "false"));
-        } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+        if (!ctx.ID().getText().startsWith("platform")) {
+            try {
+                city.addVariable(Variable.create(Type.BOOL, ctx.ID().getText(), "false"));
+            } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+                errors.add(new Error(ctx.ID().getSymbol().getLine(),
+                        ctx.ID().getSymbol().getCharPositionInLine(),
+                        ErrorMsg.VARALREADYDEFINED.getMessage()));
+            }
+        } else {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.VARALREADYDEFINED.getMessage()));
+                    ErrorMsg.RESERVEDNAME.getMessage()));
         }
     }
 
     @Override
     public void enterDefwaypoint(otldParser.DefwaypointContext ctx) {
-        try {
-            city.addFunction(new Function(ctx.ID().getText(), Type.BOOL));
-            city.addVariable(Variable.create(Type.BOOL, ctx.ID().getText(), "false"));
-            functions.put(ctx.ID(), null);
-        } catch (FunctionAlreadyDeclared functionAlreadyDeclared) {
+        if (!ctx.ID().getText().startsWith("platform")) {
+            try {
+                Variable waypoint = Variable.create(Type.BOOL, ctx.ID().getText(), "false");
+                OperationSequence ops = new OperationSequence();
+                waypoints.put(waypoint, ops);
+
+                stack.push(ops);
+                city.addVariable(waypoint);
+            } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
+                errors.add(new Error(ctx.ID().getSymbol().getLine(),
+                        ctx.ID().getSymbol().getCharPositionInLine(),
+                        ErrorMsg.VARALREADYDEFINED.getMessage()));
+            }
+        } else {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.FACTALREADYDEFINED.getMessage()));
-        } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
-            errors.add(new Error(ctx.ID().getSymbol().getLine(),
-                    ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.VARALREADYDEFINED.getMessage()));
+                    ErrorMsg.RESERVEDNAME.getMessage()));
         }
     }
 
     @Override
     public void exitDefwaypoint(otldParser.DefwaypointContext ctx) {
-        Return ret;
-        if (city.getVariable(ctx.ID().getText()) != null) {
-            ret = new Return(city.getVariable(ctx.ID().getText()));
-            if (functions.get(ctx).getType().equals(ret.getSource().getType())) {
-                stack.peek().add(ret);
-            } else {
-                errors.add(new Error(ctx.ID().getSymbol().getLine(),
-                        ctx.ID().getSymbol().getCharPositionInLine(),
-                        ErrorMsg.TYPEMISMATCH.getMessage()));
-            }
-        } else {
-            errors.add(new Error(ctx.ID().getSymbol().getLine(),
-                    ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.VARNOTDEFINED.getMessage()));
-        }
         stack.pop();
     }
 
     @Override
     public void enterDefcircle(otldParser.DefcircleContext ctx) {
-        Variable variable = city.getVariable(ctx.ID().getText());
+        Variable variable = getVariable(ctx.ID().getText());
 
         if (variable != null) {
-            try {
-                stack.peek().add(new Call(city.getFunction(ctx.ID().getText())));
                 Loop loop = new Loop(variable);
                 stack.peek().add(loop);
                 stack.push(loop.getBody());
-                //Evaluate the condition again to determine if we should continue or not
-                stack.push(loop.getConditionBody());
-            } catch (TypeMismatch typeMismatch) {
-                errors.add(new Error(ctx.ID().getSymbol().getLine(),
-                        ctx.ID().getSymbol().getCharPositionInLine(),
-                        ErrorMsg.TYPEMISMATCH.getMessage()));
-            }
+                //Add all the opsequence stored in the map to the condition body of the loop
+                loop.getConditionBody().addAll( waypoints.get(variable));
+        } else {
+            errors.add(new Error(ctx.ID().getSymbol().getLine(),
+                    ctx.ID().getSymbol().getCharPositionInLine(),
+                    ErrorMsg.VARNOTDEFINED.getMessage()));
         }
     }
 
@@ -243,7 +295,7 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterIfcond(otldParser.IfcondContext ctx) {
-        Variable variable = city.getVariable(ctx.ID().getText());
+        Variable variable = getVariable(ctx.ID().getText());
         if (variable != null) {
             Conditional cond = new Conditional(variable);
             stack.peek().add(cond);
@@ -284,7 +336,7 @@ public class otldRailroad extends otldBaseListener {
     public void enterLoad(otldParser.LoadContext ctx) {
         //TODO Array support is missing
         //Get the previously defined variable
-        Variable var = city.getVariable(ctx.ID().getText());
+        Variable var = getVariable(ctx.ID().getText());
         //Check if it has been previously defined.
         if (var != null) {
             if (ctx.INTEGER() != null) {
@@ -316,8 +368,8 @@ public class otldRailroad extends otldBaseListener {
     @Override
     public void enterTransfer(otldParser.TransferContext ctx) {
         //TODO implement for arrays
-        Variable var0 = city.getVariable(ctx.ID().get(0).getText());
-        Variable var1 = city.getVariable(ctx.ID().get(1).getText());
+        Variable var0 = getVariable(ctx.ID().get(0).getText());
+        Variable var1 = getVariable(ctx.ID().get(1).getText());
 
         if (var0 != null) {
             if (var1 != null) {
@@ -348,7 +400,7 @@ public class otldRailroad extends otldBaseListener {
         if (ctx.OP() != null) {
             //Check if all of the provided arguments exist
             for (TerminalNode node : ctx.ID()) {
-                if (city.getVariable(node.getText()) != null) {
+                if (getVariable(node.getText()) != null) {
                     vars.add(getType(node.getText()));
                 } else {
                     errors.add(new Error(ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getLine(),
@@ -373,7 +425,7 @@ public class otldRailroad extends otldBaseListener {
 
             //Check if all of the provided arguments exist
             for (TerminalNode node : ctx.ID()) {
-                if (city.getVariable(node.getText()) == null) {
+                if (getVariable(node.getText()) == null) {
                     errors.add(new Error(ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getLine(),
                             ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getCharPositionInLine(),
                             ErrorMsg.VARNOTDEFINED.getMessage()));
@@ -402,7 +454,7 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterInvert(otldParser.InvertContext ctx) {
-        Variable var = city.getVariable(ctx.ID().getText());
+        Variable var = getVariable(ctx.ID().getText());
 
         if (var != null) {
             if (var.getType().equals(Type.BOOL)) {
@@ -428,7 +480,7 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterUnarymin(otldParser.UnaryminContext ctx) {
-        Variable var = city.getVariable(ctx.ID().getText());
+        Variable var = getVariable(ctx.ID().getText());
 
         if (var != null) {
             try {
@@ -444,7 +496,7 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterWrite(otldParser.WriteContext ctx) {
-        Variable src = city.getVariable(ctx.ID().getText());
+        Variable src = getVariable(ctx.ID().getText());
         if (src != null) {
             Output output = new Output(ctx.STRING().getText(), src);
             stack.peek().add(output);
@@ -457,7 +509,7 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterInput(otldParser.InputContext ctx) {
-        Variable dest = city.getVariable(ctx.ID().getText());
+        Variable dest = getVariable(ctx.ID().getText());
         if (dest != null) {
             Input input = new Input(ctx.STRING().getText(), dest);
             stack.peek().add(input);

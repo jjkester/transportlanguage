@@ -11,7 +11,8 @@ public enum ErrorMsg {
     TYPEMISMATCH ("These types do not match!"),
     TYPENOTDEFINED ("This type is undefined!"),
     UNKNOWNVALUE ("This value is not recgonized"),
-    SYNTAXERROR ("Syntax error on:");
+    SYNTAXERROR ("Syntax error on:"),
+    RESERVEDNAME ("The ID name is a reserved name and cannot be used!");
 
     private String msg;
 
