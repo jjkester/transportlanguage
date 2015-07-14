@@ -48,7 +48,7 @@ CARGO       : ('int'|'boolean'|'char');
 INTEGER     : '-'?('0'|[1-9][0-9]*);
 STRING      : '"' ~["]* ('"' '"' ~["]*)* '"';
 CHARACTER   : '\''[a-zA-Z0-9]'\'';
-ID          : [a-z][a-zA-Z0-9]*;
+ID          : [a-zA-Z0-9]*;
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;
