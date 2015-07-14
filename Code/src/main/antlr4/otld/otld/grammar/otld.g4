@@ -27,7 +27,7 @@ code        : defcircle | ifcond | write | stop | load | transfer | transport | 
 //Conditionals
 defcircle   : 'Begin' 'circle' ID ';' code+ 'End' 'circle' ';'; // define execution code for conditional
 ifcond      : 'Approach' 'signal' ID ';' ifcondcase+ 'Pass' 'signal' ';';
-ifcondcase  : ('Case' BOOLEAN ':' code );
+ifcondcase  : 'Case' BOOLEAN ':' code ;
 
 //Execute statements
 input       : 'Ask control' STRING 'about' ('contents of' ID)|('status of' ID)';';
@@ -56,3 +56,4 @@ OP          : 'add'|'substract'|'multiply'|'divide'|'modulo'|'complt'|'compgt'|'
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;
+COMMENT : '/*' .* '*/' -> skip;
