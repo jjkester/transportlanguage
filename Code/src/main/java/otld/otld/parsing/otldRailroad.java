@@ -46,13 +46,10 @@ public class otldRailroad extends otldBaseListener {
         switch (ctxType) {
             case "boolean":
                 return Type.BOOL;
-
             case "int":
                 return Type.INT;
-
             case "char":
                 return Type.CHAR;
-
             default:
                 return null;
         }
@@ -65,13 +62,10 @@ public class otldRailroad extends otldBaseListener {
         switch (ctxType) {
             case "boolean":
                 return Type.BOOLARR;
-
             case "int":
                 return Type.INTARR;
-
             case "char":
                 return Type.CHARARR;
-
             default:
                 return null;
         }
@@ -114,7 +108,6 @@ public class otldRailroad extends otldBaseListener {
                         ctx.CARGO().getSymbol().getCharPositionInLine(),
                         ErrorMsg.TYPENOTDEFINED.getMessage()));
             }
-
         } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
@@ -141,7 +134,6 @@ public class otldRailroad extends otldBaseListener {
             Function function = new Function(ctx.ID().getText(), (Type[]) types.toArray());
             city.addFunction(function);
             functions.put(ctx.deffactory(), function);
-
         } catch (FunctionAlreadyDeclared functionAlreadyDeclared) {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
