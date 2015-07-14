@@ -63,6 +63,4 @@ public class otldRailroadTest {
         assertNull(rail.getArrType(err4));
         assertNull(rail.getArrType(err5));
     }
-
-
 }

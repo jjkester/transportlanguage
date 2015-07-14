@@ -189,7 +189,6 @@ public class otldRailroad extends otldBaseListener {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
                     ErrorMsg.FACTALREADYDEFINED.getMessage()));
-
         } catch (VariableAlreadyDeclared variableAlreadyDeclared) {
             errors.add(new Error(ctx.ID().getSymbol().getLine(),
                     ctx.ID().getSymbol().getCharPositionInLine(),
