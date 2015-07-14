@@ -8,9 +8,9 @@ import java.util.*;
 /**
  * Represents a program.
  *
- * A program has a unique identifier.
- *
- * A Program instance is responsible for keeping administration on all variables, functions, etc.
+ * A program is responsible for keeping administration on all variables, functions, etc. which are globally defined.
+ * (Currently, all variables and functions are global except for function arguments.) The program body will be executed
+ * at the start of the program. In Java terms, this is the static main method of the program.
  */
 public class Program {
     /** The identifier of the program. */

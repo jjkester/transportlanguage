@@ -1,7 +1,9 @@
 package otld.otld.intermediate;
 
 /**
- * Return of a variable in a function.
+ * A return statement.
+ *
+ * Return a variable in a function. Void returns are not supported since void functions are not supported.
  */
 public class Return extends Operation {
     /** The variable which is returned. */

@@ -5,6 +5,8 @@ package otld.otld.intermediate;
  *
  * Types are used at to make sure (at compile time) that variables are used correctly. This prevents unexpected
  * behaviour.
+ *
+ * {@code ANY} should only be used for operators.
  */
 public enum Type {
     ANY,
@@ -13,7 +15,7 @@ public enum Type {
     CHAR,
     BOOLARR,
     INTARR,
-    CHARARR,;
+    CHARARR;
 
     @Override
     public final String toString() {

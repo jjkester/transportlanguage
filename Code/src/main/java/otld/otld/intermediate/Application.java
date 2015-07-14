@@ -6,7 +6,10 @@ import otld.otld.intermediate.exceptions.TypeMismatch;
 import java.util.Arrays;
 
 /**
- * Operator application in the program.
+ * Operator application.
+ *
+ * Operation which applies an operator to a set of variables. The number of required variables is determined by the
+ * operator that is used.
  */
 public class Application extends Operation {
     /** The operator that is used. */

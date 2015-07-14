@@ -6,7 +6,10 @@ import otld.otld.intermediate.exceptions.TypeMismatch;
 import java.util.Arrays;
 
 /**
- * Function call in the program.
+ * A function call.
+ *
+ * Declares the (custom) function which is called and the arguments. The number of required arguments is defined by the
+ * function that is called.
  */
 public class Call extends Operation {
     /** The function that is called. */

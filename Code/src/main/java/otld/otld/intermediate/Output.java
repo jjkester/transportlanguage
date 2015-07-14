@@ -1,9 +1,10 @@
 package otld.otld.intermediate;
 
 /**
- * Operation to output a value.
+ * Write to stdout.
  *
- * The value from the variable will be outputted directly after the description string.
+ * Operation to write a string and value to the standard output. The value from the variable will be outputted directly
+ * after the description string.
  */
 public class Output extends Operation {
     /** The source variable for the output. */
