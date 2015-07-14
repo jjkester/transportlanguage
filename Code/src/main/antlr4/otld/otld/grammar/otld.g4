@@ -37,7 +37,7 @@ stop        : ' Stop'';';
 //Assign statements
 load        : 'Load' (INTEGER|BOOLEAN|CHARACTER) 'into' 'wagon' ID';';
 transfer    : 'Transfer' 'wagon' ID 'to' 'wagon' ID';';
-transport   : 'Transport' ID(','ID)* 'to' 'factory' (OP|ID) 'and' (('fully' 'load')|('set' 'signal')) ID';';
+transport   : 'Transport' ID(','ID)* 'to' 'factory' ID 'and' (('fully' 'load')|('set' 'signal')) ID';';
 invert      : 'Switch' 'signal' ID';';
 unarymin    : 'Turn' 'wagon' ID 'around'';';
 
@@ -49,10 +49,6 @@ INTEGER     : '-'?('0'|[1-9][0-9]*);
 STRING      : '"' ~["]* ('"' '"' ~["]*)* '"';
 CHARACTER   : '\''[a-zA-Z0-9]'\'';
 ID          : [a-z][a-zA-Z0-9]*;
-
-// All Operator Tokens
-OP          : 'add'|'substract'|'multiply'|'divide'|'modulo'|'complt'|'compgt'|'complte'|'compgte'|'compeq'|'and'|'or';
-
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;

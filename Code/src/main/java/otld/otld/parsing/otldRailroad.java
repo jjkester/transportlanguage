@@ -396,59 +396,89 @@ public class otldRailroad extends otldBaseListener {
     public void enterTransport(otldParser.TransportContext ctx) {
         ArrayList<Type> vars = new ArrayList<>(ctx.ID().size());
 
-        //This means we have a predefined function
-        if (ctx.OP() != null) {
-            //Check if all of the provided arguments exist
-            for (TerminalNode node : ctx.ID()) {
-                if (getVariable(node.getText()) != null) {
+        //Check if all of the provided arguments exist
+        for (TerminalNode node : ctx.ID()) {
+            if (getVariable(node.getText()) != null) {
+                if (!node.equals(ctx.ID().get(-2))) {
                     vars.add(getType(node.getText()));
-                } else {
-                    errors.add(new Error(ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getLine(),
-                            ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getCharPositionInLine(),
-                            ErrorMsg.VARNOTDEFINED.getMessage()));
                 }
-            }
-            try {
-                Application appl = new Application(Operator.valueOf(ctx.OP().getText()), (Variable[]) vars.toArray());
-                stack.peek().add(appl);
-            } catch (TypeMismatch typeMismatch) {
-                errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
-                        ctx.ID().get(0).getSymbol().getCharPositionInLine(),
-                        ErrorMsg.TYPEMISMATCH.getMessage()));
+            } else {
+                errors.add(new Error(ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getLine(),
+                        ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getCharPositionInLine(),
+                        ErrorMsg.VARNOTDEFINED.getMessage()));
             }
         }
 
-        //This means we have a custom function
-        else {
-            //Remove the second to last argument since this is actually the function name
-            vars.remove(ctx.ID().size() - 2);
+        String functionID = ctx.ID().get(ctx.ID().size() -2).getText();
 
-            //Check if all of the provided arguments exist
-            for (TerminalNode node : ctx.ID()) {
-                if (getVariable(node.getText()) == null) {
-                    errors.add(new Error(ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getLine(),
-                            ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getCharPositionInLine(),
-                            ErrorMsg.VARNOTDEFINED.getMessage()));
-                }
-                vars.add(getType(node.getText()));
-            }
-
-            Function func = city.getFunction(ctx.ID().get(ctx.ID().size() - 2).getText());
-            //If the custom function exists then call it
-            if (func != null) {
+        switch (functionID) {
+            case "ADDITION" :
                 try {
-                    Call call = new Call(func, (Variable[]) vars.toArray());
-                    stack.peek().add(call);
+                    Application appl = new Application(Operator.valueOf("ADDITION"), (Variable[]) vars.toArray());
+                    stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
                             ctx.ID().get(0).getSymbol().getCharPositionInLine(),
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
-            } else {
-                errors.add(new Error(ctx.ID().get(ctx.ID().size() - 2).getSymbol().getLine(),
-                        ctx.ID().get(ctx.ID().size() - 2).getSymbol().getCharPositionInLine(),
-                        ErrorMsg.FACTUNDEFINED.getMessage()));
-            }
+                break;
+            case "SUBTRACTION" :
+                try {
+                    Application appl = new Application(Operator.valueOf("SUBTRACTION"), (Variable[]) vars.toArray());
+                    stack.peek().add(appl);
+                } catch (TypeMismatch typeMismatch) {
+                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
+                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPEMISMATCH.getMessage()));
+                }
+                break;
+            case "MULTIPLICATION" :
+                try {
+                    Application appl = new Application(Operator.valueOf("MULTIPLICATION"), (Variable[]) vars.toArray());
+                    stack.peek().add(appl);
+                } catch (TypeMismatch typeMismatch) {
+                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
+                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPEMISMATCH.getMessage()));
+                }
+                break;
+            case "DIVISION" :
+                try {
+                    Application appl = new Application(Operator.valueOf("DIVISION"), (Variable[]) vars.toArray());
+                    stack.peek().add(appl);
+                } catch (TypeMismatch typeMismatch) {
+                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
+                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPEMISMATCH.getMessage()));
+                }
+                break;
+            case "MODULUS" :
+                try {
+                    Application appl = new Application(Operator.valueOf("MODULUS"), (Variable[]) vars.toArray());
+                    stack.peek().add(appl);
+                } catch (TypeMismatch typeMismatch) {
+                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
+                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPEMISMATCH.getMessage()));
+                }
+                break;
+            //This means we have a custom function
+            default: Function func = city.getFunction(functionID);
+                //If the custom function exists then call it
+                if (func != null) {
+                    try {
+                        Call call = new Call(func, (Variable[]) vars.toArray());
+                        stack.peek().add(call);
+                    } catch (TypeMismatch typeMismatch) {
+                        errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
+                                ctx.ID().get(0).getSymbol().getCharPositionInLine(),
+                                ErrorMsg.TYPEMISMATCH.getMessage()));
+                    }
+                } else {
+                    errors.add(new Error(ctx.ID().get(ctx.ID().size() - 2).getSymbol().getLine(),
+                            ctx.ID().get(ctx.ID().size() - 2).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.FACTUNDEFINED.getMessage()));
+                }
         }
     }
 
