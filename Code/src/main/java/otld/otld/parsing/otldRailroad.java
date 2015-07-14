@@ -64,11 +64,9 @@ public class otldRailroad extends otldBaseListener {
      * Returns a variable assigned with the passed id if one is declared.
      * If the code requesting the variable is inside a factory body a platform
      * can be returned as well.
-     * <p>
      * All other cases return {@code null};
-     * </p>
      *
-     * @param id
+     * @param id of the variable
      * @return requestedVariable
      */
     public Variable getVariable(String id) {
