@@ -20,4 +20,3 @@ Begin company;
     Transport a to factory lol and fully load b;
 End company;
 
-/* Platforms still need to be implemented, also discuss use of OP of predefined functions */

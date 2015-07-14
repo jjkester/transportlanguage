@@ -100,8 +100,8 @@ public class otldRailroad extends otldBaseListener {
                 int index = Integer.parseInt(id.substring(7));
                 Variable[] platforms = lastFunction.getVariables();
 
-                if (index < platforms.length) {
-                    returnVar = platforms[index];
+                if (index < platforms.length && index > 0) {
+                    returnVar = platforms[index-1];
                 }
             }
         } else {
@@ -167,7 +167,6 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterFactory(otldParser.FactoryContext ctx) {
-        if (!ctx.ID().getText().startsWith("platform")) {
             ArrayList<Type> types = new ArrayList<>(ctx.CARGO().size());
             for (TerminalNode n : ctx.CARGO()) {
                 Type type = getType(n.getText());
@@ -192,11 +191,6 @@ public class otldRailroad extends otldBaseListener {
                         ctx.ID().getSymbol().getCharPositionInLine(),
                         ErrorMsg.FACTALREADYDEFINED.getMessage()));
             }
-        } else {
-            errors.add(new Error(ctx.ID().getSymbol().getLine(),
-                    ctx.ID().getSymbol().getCharPositionInLine(),
-                    ErrorMsg.RESERVEDNAME.getMessage()));
-        }
     }
 
     @Override
