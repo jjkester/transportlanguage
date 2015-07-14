@@ -1,1 +1,166 @@
 \chapter{Language specification}
+
+\section{Layout of a program}
+
+Defining a program in \shortname is like defining a program in Pascal, only in \shortname you are defining a \emph{city}. A city can be defined with the command \code{City <name>;}, where \code{<name>} is replaced with the name of the program.
+
+\subsection{City blocks}
+
+A city consists of a number of blocks, each containing integral parts of the program. Each block starts with the statement \code{Begin <block>;} and ends with \code{End <block>;}. Multiple blocks of the same type are supported, the contents of any block other than the first will be treated as it was appended to the first block of the type.
+
+\begin{itemize}
+\item \code{industry}: This block should contain all factories of the city.
+\item \code{depot}: This block should contain all wagons and trains.
+\item \code{track}: This block should contain all signals and waypoints.
+\item \code{company}: This block should contain the program itself.
+\end{itemize}
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Begin depot;
+	Wagon w accepts coal;
+	Train t accepts 6 steel;
+End depot;
+\end{lstlisting}
+
+\section{Basic expressions}
+
+\subsection{Constants}
+
+Constants can not be declared as such. However, they can be used in the program, for example in assignments. The list below contains the available types with a regex showing the valid inputs.
+
+Strings cannot be used in variables, but are only included for in- and outputs.
+
+\begin{itemize}
+\item Integer: \verb=-?(0|[1-9][0-9]*)=
+\item Boolean: \verb=red|green= (where \verb|red| is false and \verb|green| is true)
+\item Character: \verb='[a-zA-Z0-9]'=
+\item String: \verb="~["]*(""~["]*)*"=
+\end{itemize}
+
+\subsection{Variable declarations}
+
+Variables in \shortname are called \emph{wagons}. Wagons are statically typed. The type should be set on declaration.
+A wagon can be declared with the statement \code{Wagon <id> accepts <type>;} where \code{<id>} is a unique identifier for the wagon and \code{<type>} is the type of the wagon. Variables can only be declared in the \code{depot} city block.
+
+Booleans can also be stored in a \emph{signal}. The declaration and assignment of signals is different from wagons. A signal can be declared with the statement \code{Signal <id> is <color>;} where \code{<color>} is either \code{red} or \code{green}. Signals are used with conditionals. Signals can only be declared in the \code{track} city block.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Wagon w1 accepts int;
+Wagon w2 accepts boolean;
+Signal s is green;
+\end{lstlisting}
+
+\subsection{Assignment}
+
+A constant value or a value from another variable can be assigned to a variable.
+
+To assign a constant to a variable use the statement \code{Load <const> into wagon <id>;} where \code{<const>} is the constant and \code{<id>} is the identifier for the wagon.
+
+To copy the value of an existing wagon into another wagon use \code{Transfer wagon <id> to wagon <id>;}. The term `transfer' does not mean that the source wagon will be empty -- it remains untouched.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Load 10 into wagon w1;
+Transfer wagon w1 into wagon w2;
+\end{lstlisting}
+
+\subsection{Arithmetic operations}
+
+There are two unary operations with each a special syntax:
+
+\begin{itemize}
+\item Unary minus: Inverts a wagon. \\ \code{Turn wagon <id> around;}
+\item Not (for signals): Inverts a signal. \\ \code{Switch signal <id>;}
+\end{itemize}
+
+The other operations use the statement \code{Transport <id>, <id> to factory <op> and fully load <id>;}. The first to occurances of \code{<id>} are the left- and righthand variables for the operation, the third \code{<id>} is the destination wagon. The operation \code{<op>} can be any of the following:
+
+\begin{itemize}
+\item Addition: \code{add}
+\item Subtraction: \code{subtract}
+\item Multiplication: \code{multiply}
+\item Division: \code{divide}
+\item Modulo division: \code{modulo}
+\item Less than: \code{complt}
+\item Greater than: \code{compgt}
+\item Less than or equal: \code{complte}
+\item Greater than or equal: \code{compgte}
+\item Equal: \code{compeq}
+\item Logical and: \code{and}
+\item Logical or: \code{or}
+\end{itemize}
+
+The operations that return a boolean can be used in two ways; either as mentioned above or with the statement \code{Transport <id>, <id> to factory <op> and set signal <id>;} to store the boolean in a signal.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Transport w1, w2 to factory multiply and fully load w1;
+Transport w1, w2 to factory complt and set signal s2;
+Transport s1, s2 to factory and and set signal s1;
+\end{lstlisting}
+
+\section{Block statments}
+
+\subsection{Conditionals (if/else)}
+
+Conditional statements are based on signals. A conditional statement starts with \code{Approach signal <id>;} where \code{<id>} is the signal that indicates which path to choose. Code under \code{Case green;} is executed when the signal is green, code under \code{Case red;} is executed when the signal is red. The statement ends with \code{Pass signal;}.
+
+The \code{Case} statements are not required, these just function as the start points for each block. The code under these statements is executed up until another \code{Case} statement or \code{Pass signal}. Multiple case statements for the same boolean value are allowed, however, the code of a second statement will just be appended to the code from the first.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Approach signal s;
+	Case red:
+		Write "Train delayed" to journal;
+Pass signal;
+\end{lstlisting}
+% TODO this has changed
+
+\subsection{Loops (while)}
+
+In \shortname \emph{circles} can be used for loops. Before defining the loop itself, the loop condition (\emph{waypoint}) needs to be defined. A waypoint can be defined with \code{Waypoint <id>;}. A waypoint behaves exactly the same way as a signal, but with one difference. It is possible to programmatically define the value of the waypoint every time it is accessed. To do this, add a waypoint block directly after the waypoint (\code{Begin waypoint;} and \code{End waypoint;}). Code in this waypoint block should write a boolean value to the identifier of the waypoint. Waypoints can only be declared in the \code{track} city block.
+
+The code that should be executed in each iteration should be in a circle block starting with \code{Begin circle <id>;} and ending with \code{End circle;} where \code{<id>} is the identifier of the waypoint. To break out of a circle the statement \code{Stop;} can be used.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Waypoint p;
+Begin waypoint;
+	Transport i, length to factory complt and set signal p;
+End waypoint;
+
+Begin circle p;
+	Write "This is executed a single time" to journal;
+	Stop;
+	Write "This is not executed" to journal;
+End circle;
+\end{lstlisting}
+% TODO this has changed
+
+\subsection{Functions}
+
+Functions are represented as \emph{factories}. Factories can be defined in the \code{industry} city block using the statement \code{Factory <id> accepts <type>[, <type>]* produces <type>;}, where \code{<id>} is the name of the factory and \code{<type>} is one of the supported variable types. This statement should be directly followed by a \code{production} block for the body of the function. This block should always end with \code{Final product <var>;}, which returns \code{<var>}. Returns are only allowed at this spot. The arguments can be accessed in the function body using \code{platformX} as variable name, where \code{X} is the 1-indexed argument index.
+
+A function can be called similarly to an arithmetic operation with the \code{Transport <id>, <id> to factory <op> and fully load <id>;} statement where \code{<op>} is the factory name.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Factory isZero accepts int produces boolean;
+Begin production;
+	Load 0 into wagon zero;
+	Transport platform1, zero to factory eq and fully load temp;
+	Final product temp;
+End production;
+
+Transport w1 to factory half and set signal s1;
+\end{lstlisting}
+

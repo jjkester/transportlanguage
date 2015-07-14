@@ -1,15 +1,28 @@
-\documentclass[11pt,a4paper,titlepage,draft]{report}
+\documentclass[11pt,a4paper,titlepage]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{hyperref}
+
+\newcommand{\code}[1]{{\ttfamily\small #1}}
+\lstset{basicstyle=\ttfamily\small,frame=lines,columns=fullflexible}
+
+\newcommand{\name}{Open Transport Language Deluxe }
+\newcommand{\shortname}{\textsc{otld} }
+
 \title{\Huge Open Transport Language Deluxe \\ \vspace{5mm} \Large Final project for Compiler Construction \\ University of Twente}
+
 \author{
 Martijn Bruning \\
 \small s1363999
 \and Jan-Jelle Kester \\
 \small s1337718
 }
+
 \date{\today}
+
 \begin{document}
 
 \maketitle
