@@ -1,4 +1,4 @@
-City amsterdam;
+City Amsterdam;
 
 Begin depot;
     Wagon a accepts int;

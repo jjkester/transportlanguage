@@ -1,0 +1,31 @@
+City Almere;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+End depot;
+
+Begin industry;
+    Factory lol accepts int produces boolean;
+
+    Begin production;
+        Transport platform1, platform1 to factory complte and fully load platform2;
+
+        Final product platform2;
+    End production;
+
+    Factory lol accepts int produces boolean;
+
+        Begin production;
+            Transport platform1, platform1 to factory complte and fully load platform2;
+
+            Final product platform2;
+        End production;
+End industry;
+
+Begin company;
+    Load 11235 into wagon c;
+End company;
+
+/** We expect a var not defined and a factory already defined error */
+

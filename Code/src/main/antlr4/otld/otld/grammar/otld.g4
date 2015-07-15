@@ -1,6 +1,6 @@
 grammar otld;
 
-program     : city depot* track* industry* company; //This is how a program should be formatted
+program     : city depot? track? industry? company; //This is how a program should be formatted
 
 // Program setup rules
 city        : 'City'ID';';

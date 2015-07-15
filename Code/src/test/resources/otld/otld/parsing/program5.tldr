@@ -1,0 +1,14 @@
+City Maastricht;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+    Wagon platform3 accepts int;
+End depot;
+
+Begin company;
+    Transport a to factory bad and fully load b;
+End company;
+
+/** We expect a reserved name and factory undefined error */
+
