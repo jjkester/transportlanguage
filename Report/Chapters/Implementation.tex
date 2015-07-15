@@ -29,13 +29,6 @@ Target languages are supported through the abstract \code{Compiler} class, which
 
 Details on the different classes can be found in the Javadoc of the \code{intermediate} package. The class diagram of this package has been included on page \pageref{fig:class_diagram__intermediate}.
 
-\begin{figure}[p]
-\centering
-\includegraphics{Images/class_diagram__intermediate}
-\caption{Class diagram for the intermedate representation}
-\label{fig:class_diagram__intermediate}
-\end{figure}
-
 \section{Back end compiler}
 
 The back end compiler is an implementation of the \code{Compiler} abstract class of the intermediate representation.
@@ -48,3 +41,20 @@ The back end compiler builds a Java class file from scratch.
 The program code is put in the static main method, so the class file can be executed directly.
 The class (and file) name correspond to the name of the program.
 User-defined functions are added as public methods, and user-defined variables as public fields.
+The class diagram of the back end compiler has been included on page \pageref{fig:class_diagram__jvm}.
+
+\begin{landscape}
+\begin{figure}[p]
+\centering
+\includegraphics[scale=0.25]{Images/class_diagram__intermediate}
+\caption{Class diagram for the intermedate representation}
+\label{fig:class_diagram__intermediate}
+\end{figure}
+\end{landscape}
+
+\begin{figure}[p]
+\centering
+\includegraphics[scale=0.25]{Images/class_diagram__jvm}
+\caption{Class diagram for the back end compiler}
+\label{fig:class_diagram__jvm}
+\end{figure}
