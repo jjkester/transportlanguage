@@ -93,31 +93,34 @@ public class OTLDListenerTest {
         assertEquals(2, city.getFunction("notLessThanOrEquals").getArgTypes().length);
 
         // Validate if all the operations indeed occur in the order that we expect them
-        assertTrue(city.getBody().getFirst() instanceof ValueAssignment);
+        assertTrue(city.getBody().get(0) instanceof Input);
         assertTrue(city.getBody().get(1) instanceof ValueAssignment);
-        assertTrue(city.getBody().get(2) instanceof ValueAssignment);
+        assertTrue(city.getBody().get(2) instanceof Application);
+        assertTrue(city.getBody().get(3) instanceof Conditional);
+        assertTrue(city.getBody().get(4) instanceof ValueAssignment);
+        assertTrue(city.getBody().get(5) instanceof ValueAssignment);
 
-        assertTrue(city.getBody().get(3) instanceof Call);
-        assertTrue(city.getBody().get(4) instanceof Call);
-        assertTrue(city.getBody().get(5) instanceof Loop);
+        assertTrue(city.getBody().get(6) instanceof Call);
+        assertTrue(city.getBody().get(7) instanceof Call);
+        assertTrue(city.getBody().get(8) instanceof Loop);
 
-        assertTrue(city.getBody().get(6) instanceof Output);
-        assertTrue(city.getBody().get(7) instanceof Output);
-        assertTrue(city.getBody().get(8) instanceof Output);
         assertTrue(city.getBody().get(9) instanceof Output);
         assertTrue(city.getBody().get(10) instanceof Output);
         assertTrue(city.getBody().get(11) instanceof Output);
         assertTrue(city.getBody().get(12) instanceof Output);
+        assertTrue(city.getBody().get(13) instanceof Output);
+        assertTrue(city.getBody().get(14) instanceof Output);
+        assertTrue(city.getBody().get(15) instanceof Output);
 
         // Validate the contents of the loop operation
-        assertTrue(((Loop) city.getBody().get(5)).getConditionBody().getFirst() instanceof Output);
-        assertTrue(((Loop) city.getBody().get(5)).getBody().get(0) instanceof Application);
-        assertTrue(((Loop) city.getBody().get(5)).getBody().get(1) instanceof Call);
+        assertTrue(((Loop) city.getBody().get(8)).getConditionBody().getFirst() instanceof Output);
+        assertTrue(((Loop) city.getBody().get(8)).getBody().get(0) instanceof Application);
+        assertTrue(((Loop) city.getBody().get(8)).getBody().get(1) instanceof Call);
 
         // Validate ValueAssignment operation
-        assertEquals(25, ((ValueAssignment) city.getBody().getFirst()).getValue());
-        assertEquals(1, ((ValueAssignment) city.getBody().get(1)).getValue());
-        assertEquals('c', ((ValueAssignment) city.getBody().get(2)).getValue());
+        assertEquals(0, ((ValueAssignment) city.getBody().get(1)).getValue());
+        assertEquals(1, ((ValueAssignment) city.getBody().get(4)).getValue());
+        assertEquals('c', ((ValueAssignment) city.getBody().get(5)).getValue());
     }
 
     @Test
@@ -176,7 +179,7 @@ public class OTLDListenerTest {
         // Verify that we indeed encounter errors
         assertEquals(false, railroad.getErrors().isEmpty());
         assertEquals(1, railroad.getErrors().size());
-        assertEquals("Error at line:6:20: Syntax error on:mismatched input 'bool' expecting CARGO)",railroad.getErrors().get(0).getError());
+        assertEquals("Error at line:6:20: Syntax error on:mismatched input 'bool' expecting CARGO",railroad.getErrors().get(0).getError());
     }
 
     @Test
