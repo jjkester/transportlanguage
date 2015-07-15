@@ -47,7 +47,7 @@ public class Error {
         out.append(String.format("Error at line:%d:%d: %s", line, charpos, message));
 
         if (this.symbol != null) {
-            out.append(String.format("%s)", symbol));
+            out.append(String.format("%s", symbol));
         }
 
         return out.toString();

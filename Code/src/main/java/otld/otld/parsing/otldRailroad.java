@@ -463,7 +463,7 @@ public class otldRailroad extends otldBaseListener {
         Variable[] varArr = new Variable[vars.size()];
 
         switch (functionID) {
-            case "addition":
+            case "add":
                 try {
                     appl = new Application(Operator.ADDITION, vars.toArray(varArr));
                     stack.peek().add(appl);
@@ -483,7 +483,7 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "multiplication":
+            case "multiply":
                 try {
                     appl = new Application(Operator.MULTIPLICATION, vars.toArray(varArr));
                     stack.peek().add(appl);
@@ -493,7 +493,7 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "division":
+            case "divide":
                 try {
                     appl = new Application(Operator.DIVISION, vars.toArray(varArr));
                     stack.peek().add(appl);
@@ -503,7 +503,7 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "modulus":
+            case "modulo":
                 try {
                     appl = new Application(Operator.MODULUS, vars.toArray(varArr));
                     stack.peek().add(appl);
@@ -513,7 +513,7 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "uminus":
+            case "minus":
                 try {
                     appl = new Application(vars.get(0).getType() == Type.BOOL ? Operator.NOT : Operator.UMINUS, vars.toArray(varArr));
                     stack.peek().add(appl);
@@ -523,39 +523,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "land":
-                try {
-                    appl = new Application(Operator.LAND, vars.toArray(varArr));
-                    stack.peek().add(appl);
-                } catch (TypeMismatch typeMismatch) {
-                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
-                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
-                            ErrorMsg.TYPEMISMATCH.getMessage()));
-                }
-                break;
-            case "lor":
-                try {
-                    appl = new Application(Operator.LOR, vars.toArray(varArr));
-                    stack.peek().add(appl);
-                } catch (TypeMismatch typeMismatch) {
-                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
-                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
-                            ErrorMsg.TYPEMISMATCH.getMessage()));
-                }
-                break;
-            case "lxor":
-                try {
-                    appl = new Application(Operator.LXOR, vars.toArray(varArr));
-                    stack.peek().add(appl);
-                } catch (TypeMismatch typeMismatch) {
-                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
-                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
-                            ErrorMsg.TYPEMISMATCH.getMessage()));
-                }
-                break;
             case "and":
                 try {
-                    appl = new Application(Operator.AND, vars.toArray(varArr));
+                    appl = new Application(vars.get(0).getType() == Type.BOOL ? Operator.AND : Operator.LAND, vars.toArray(varArr));
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -565,7 +535,17 @@ public class otldRailroad extends otldBaseListener {
                 break;
             case "or":
                 try {
-                    appl = new Application(Operator.OR, vars.toArray(varArr));
+                    appl = new Application(vars.get(0).getType() == Type.BOOL ? Operator.OR : Operator.LOR, vars.toArray(varArr));
+                    stack.peek().add(appl);
+                } catch (TypeMismatch typeMismatch) {
+                    errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
+                            ctx.ID().get(0).getSymbol().getCharPositionInLine(),
+                            ErrorMsg.TYPEMISMATCH.getMessage()));
+                }
+                break;
+            case "xor":
+                try {
+                    appl = new Application(Operator.LXOR, vars.toArray(varArr));
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -623,7 +603,7 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "equals":
+            case "compeq":
                 try {
                     appl = new Application(Operator.EQUALS, vars.toArray(varArr));
                     stack.peek().add(appl);
@@ -633,7 +613,7 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "nequals":
+            case "compne":
                 try {
                     appl = new Application(Operator.NEQUALS, vars.toArray(varArr));
                     stack.peek().add(appl);
