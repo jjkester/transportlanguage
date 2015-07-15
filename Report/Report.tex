@@ -5,19 +5,29 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{hyperref}
-\usepackage{color}
+\usepackage{xcolor}
+\usepackage{pdflscape}
 
 \newcommand{\code}[1]{{\ttfamily\small #1}}
 \lstset{
   basicstyle=\ttfamily\small,
   frame=lines,
   columns=fullflexible,
-  breaklines=true,                 % automatic line breaking only at whitespace
-  captionpos=b,                    % sets the caption-position to bottom
-  commentstyle=\color{mygreen},    % comment style
-  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
-  keywordstyle=\color{blue},       % keyword style
-  stringstyle=\color{mymauve}
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{white!50!black},
+  escapeinside={\%*}{*)},
+  keywordstyle=\color{blue},
+  stringstyle=\color{green!50!black}
+}
+\lstdefinestyle{Antlr}{
+  moredelim=[s][\color{green!50!black}]{'}{'},
+  moredelim=*[s][\color{black}]{options}{\}},
+  commentstyle={\color{white!50!black}},
+  morecomment=[l]{//},
+  alsoletter={:,|,;},
+  morekeywords={:,|,;,grammar},
+  keywordstyle={\color{blue}},
 }
 
 \newcommand{\name}{Open Transport Language Deluxe }
