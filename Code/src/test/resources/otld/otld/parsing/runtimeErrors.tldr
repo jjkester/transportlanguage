@@ -1,0 +1,16 @@
+City runtimeErrors;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+    Wagon c accepts int;
+End depot;
+
+Begin company;
+    Load 25 into wagon a;
+    Load red into wagon b;
+    Load 0 into wagon c;
+
+    Transport a, c to factory divide and fully load a;
+    Ask control "put something bad into this boolean" about contents of b;
+End company;
