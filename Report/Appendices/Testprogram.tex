@@ -2,6 +2,8 @@
 \label{chap:testprogram}
 
 \begin{landscape}
+\subsubsection*{OTLD source}
+
 \begin{lstlisting}
 City Enschede;
 
@@ -70,5 +72,82 @@ Begin company;
     Write "s2=" s2 to journal;
     Write "s3=" s3 to journal;
 End company;
+\end{lstlisting}
+
+\subsubsection*{Decompiled bytecode}
+
+\begin{lstlisting}[language=Java]
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class Enschede {
+    public boolean s = false;
+    public boolean s2 = false;
+    public boolean s3 = false;
+    public int a;
+    public boolean b;
+    public char c;
+    public int d;
+    public boolean w = false;
+
+    public boolean notLessThanOrEquals(int var1, int var2) {
+        int var3 = var1 - var2 > 0?0:1;
+        var3 = (var3 + 1) % 2;
+        return (boolean)var3;
+    }
+
+    public Enschede() {
+    }
+
+    public static void main(String[] var0) {
+        Enschede var1 = new Enschede();
+        Scanner var10000 = new Scanner(System.in);
+        System.out.print("\"a=?\"");
+        var1.a = var10000.nextInt();
+        var1.d = 0;
+        var1.s = var1.a - var1.d > 0;
+        if(!var1.s) {
+            var1.d = 0;
+        } else {
+            var1.d = 1;
+            var1.c = 99;
+            var1.b = var1.notLessThanOrEquals(var1.a, var1.a);
+            var1.s2 = var1.notLessThanOrEquals(var1.a, var1.a);
+
+            while(true) {
+                PrintStream var2 = System.out;
+                System.out.print("\"Passed waypoint \"");
+                var2.println(var1.w);
+                if(!var1.w) {
+                    var2 = System.out;
+                    System.out.print("\"a=\"");
+                    var2.println(var1.a);
+                    var2 = System.out;
+                    System.out.print("\"b=\"");
+                    var2.println(var1.b);
+                    var2 = System.out;
+                    System.out.print("\"c=\"");
+                    var2.println(var1.c);
+                    var2 = System.out;
+                    System.out.print("\"d=\"");
+                    var2.println(var1.d);
+                    var2 = System.out;
+                    System.out.print("\"s=\"");
+                    var2.println(var1.s);
+                    var2 = System.out;
+                    System.out.print("\"s2=\"");
+                    var2.println(var1.s2);
+                    var2 = System.out;
+                    System.out.print("\"s3=\"");
+                    var2.println(var1.s3);
+                    return;
+                }
+
+                var1.a -= var1.d;
+                var1.w = var1.notLessThanOrEquals(var1.a, var1.d);
+            }
+        }
+    }
+}
 \end{lstlisting}
 \end{landscape}
