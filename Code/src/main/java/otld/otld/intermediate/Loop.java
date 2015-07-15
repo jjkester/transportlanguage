@@ -1,7 +1,7 @@
 package otld.otld.intermediate;
 
 /**
- * Loop in the program.
+ * Loop (while) block statement.
  *
  * A loop consists of three parts: the condition, the condition body and the body. The condition is a boolean variable.
  * The condition body is a piece of code which should set the condition and is run before every iteration and before the

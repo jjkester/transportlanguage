@@ -38,7 +38,9 @@ public abstract class Compiler {
     /**
      * Raises an {@code UnsupportedOperationException}. This method should be called if a compiler does not support a
      * certain feature.
+     *
      * @param obj The object that cannot be processed.
+     * @throws UnsupportedOperationException
      */
     protected void unsupported(final Object obj) {
         throw new UnsupportedOperationException(String.format("<%s> is not supported by this compiler.", obj.toString()));

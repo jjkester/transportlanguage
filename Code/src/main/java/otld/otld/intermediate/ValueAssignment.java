@@ -1,7 +1,10 @@
 package otld.otld.intermediate;
 
 /**
- * Assignment of a value to a variable in the program.
+ * Value assignment.
+ *
+ * Assignment of a (constant) value to a variable. Type checking is done implicitly by the class signature. It is
+ * recommended to create a value assignment using the factory method on a variable instance.
  *
  * @param <T> The Java type of the value of the destination variable.
  */
