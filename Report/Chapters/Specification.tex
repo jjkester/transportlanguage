@@ -19,9 +19,13 @@ A city consists of a number of blocks, each containing integral parts of the pro
 
 \begin{lstlisting}
 Begin depot;
-	Wagon w accepts coal;
-	Train t accepts 6 steel;
+	Wagon w accepts int;
 End depot;
+
+Begin company;
+	Load 1 into wagon w;
+	Turn wagon w around;
+End company;
 \end{lstlisting}
 
 \section{Basic expressions}
@@ -46,6 +50,8 @@ A wagon can be declared with the statement \code{Wagon <id> accepts <type>;} whe
 
 Booleans can also be stored in a \emph{signal}. The declaration and assignment of signals is different from wagons. A signal can be declared with the statement \code{Signal <id> is <color>;} where \code{<color>} is either \code{red} or \code{green}. Signals are used with conditionals. Signals can only be declared in the \code{track} city block.
 
+The indentifiers of wagons and signals must be unique for all wagons and signals. In other words, there cannot be a wagon and a signal which share a name. Furthermore, the identifiers cannot start with the string \code{platform} since this is a reserved name.
+
 \subsubsection*{Example}
 
 \begin{lstlisting}
@@ -66,7 +72,8 @@ To copy the value of an existing wagon into another wagon use \code{Transfer wag
 
 \begin{lstlisting}
 Load 10 into wagon w1;
-Transfer wagon w1 into wagon w2;
+Load red into wagon w2;
+Transfer wagon w1 into wagon w3;
 \end{lstlisting}
 
 \subsection{Arithmetic operations}
@@ -100,9 +107,11 @@ The operations that return a boolean can be used in two ways; either as mentione
 \subsubsection*{Example}
 
 \begin{lstlisting}
+Turn wagon w1 around;
 Transport w1, w2 to factory multiply and fully load w1;
 Transport w1, w2 to factory complt and set signal s2;
 Transport s1, s2 to factory and and set signal s1;
+Switch signal s1;
 \end{lstlisting}
 
 \section{Block statments}
@@ -129,18 +138,21 @@ In \shortname \emph{circles} can be used for loops. Before defining the loop its
 
 The code that should be executed in each iteration should be in a circle block starting with \code{Begin circle <id>;} and ending with \code{End circle;} where \code{<id>} is the identifier of the waypoint. To break out of a circle the statement \code{Stop;} can be used.
 
+Since waypoints are a special case of signals, all normal operations for signals can be used with waypoints.
+
 \subsubsection*{Example}
 
 \begin{lstlisting}
 Waypoint p;
 Begin waypoint;
 	Transport i, length to factory complt and set signal p;
+	Switch signal p;
 End waypoint;
 
 Begin circle p;
-	Write "This is executed a single time" to journal;
+	Write "This is executed a single time: " p to journal;
 	Stop;
-	Write "This is not executed" to journal;
+	Write "This is not executed: " p to journal;
 End circle;
 \end{lstlisting}
 % TODO this has changed
@@ -164,3 +176,29 @@ End production;
 Transport w1 to factory half and set signal s1;
 \end{lstlisting}
 
+\subsection{Input and output}
+
+The program can receive input from the user (stdin) and output values (stdout).
+
+To receive input, use \code{Ask control <question> about contents of <id>;} to ask the user to input a value for a wagon with \code{<id>} as identifier. For signals, the statement is \code{Ask control <question> about status of <id>;}. \code{<question>} is in both cases a string which is used as prompt.
+
+To write a value to the standard output, use \code{Write <info> <id> to journal;}, where \code{<info>} is a string containing information about the value and \code{<id>} is the wagon or signal to print.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+Ask control "Set signal " about status of s;
+Write "Signal set to " s to journal;
+\end{lstlisting}
+
+\subsection{Comments}
+
+It is possible to comment source code. Only block comments are supported. The style is similar to the block comments of languages like C and Java.
+
+\subsubsection*{Example}
+
+\begin{lstlisting}
+/* Commented with Java equivalent */
+Wagon w accepts int;   /* int w; */
+Load 10 into wagon w;  /* w = 10; */
+\end{lstlisting}
