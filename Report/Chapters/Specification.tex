@@ -8,12 +8,12 @@ Defining a program in \shortname is like defining a program in Pascal, only in \
 
 \subsection{City blocks}
 
-A city consists of a number of blocks, each containing integral parts of the program. Each block starts with the statement \code{Begin <block>;} and ends with \code{End <block>;}. Multiple blocks of the same type are supported, the contents of any block other than the first will be treated as it was appended to the first block of the type.
+A city consists of a number of blocks, each containing integral parts of the program. Each block starts with the statement \code{Begin <block>;} and ends with \code{End <block>;}. Each block should only occur once, and must be used in the order below. Only the \code{company} block is required.
 
 \begin{itemize}
-\item \code{industry}: This block should contain all factories of the city.
 \item \code{depot}: This block should contain all wagons and trains.
 \item \code{track}: This block should contain all signals and waypoints.
+\item \code{industry}: This block should contain all factories of the city.
 \item \code{company}: This block should contain the program itself.
 \end{itemize}
 
@@ -24,9 +24,28 @@ Begin depot;
 	Wagon w accepts int;
 End depot;
 
+Begin track;
+	Signal s is red;
+	
+	Waypoint p;
+	Begin waypoint;
+		Switch signal p;
+	End waypoint;
+End track;
+
+Begin industry;
+	Factory printInt accepts int produces int;
+	Begin production;
+		Write "Integer " platform1 to journal;
+		Final product platform1;
+	End production;
+End industry;
+
 Begin company;
-	Load 1 into wagon w;
-	Turn wagon w around;
+	Load 10 into wagon w;
+	Begin circle p;
+		Transport w to factory printInt and fully load w;
+	End circle;
 End company;
 \end{lstlisting}
 

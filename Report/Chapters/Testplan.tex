@@ -9,3 +9,15 @@ The back end compiler does not feature many automated testing since there are no
 However, we wrote a unit test which compiles a program using all visitor methods on the back end compiler.
 Furthermore, the ASM class writer calls are checked by ASM for abnormalities while compiling this program.
 We also ran and inspected the resulting class file manually with \code{javap} and the IntelliJ decompiler.
+
+\section{Test programs}
+
+The compiler has been tested with a number of test programs. The first program is a program which is correct and uses (almost) all features of the language. This program is included in appendix \ref{chap:testprogram} on page \pageref{chap:testprogram}.
+
+All other test programs are located in \code{Code/src/test/resources/otld/otld/} and are discussed below.
+
+\begin{itemize}
+\item
+	\code{test.tldr} \\
+	Description including compiler output
+\end{itemize}

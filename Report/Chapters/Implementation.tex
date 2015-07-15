@@ -8,7 +8,13 @@ The central part of our application, which ties everything together, is the \cod
 
 \section{Front end compiler}
 
-% Visitor
+The front end compiler is an Antlr 4 listener.
+The listener builds a program using objects from the intermediate representation (which is discussed later on).
+The front end compiler also checks the program for errors.
+
+In case an error occured, the front end compiler tries to continue.
+While this process can yield incorrect errors, which will mainly be caused by an earlier error, it can provide the user more errors in a single pass.
+This way he has the ability to fix all errors at once.
 
 \section{Intermediate representation}
 
