@@ -2,8 +2,12 @@ package otld.otld;
 
 import otld.otld.intermediate.Program;
 import otld.otld.jvm.BytecodeCompiler;
+import otld.otld.parsing.*;
+import otld.otld.parsing.Error;
 
 import java.io.*;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Main class of the application.
@@ -63,12 +67,20 @@ public class Main {
         }
     }
 
-    public static void compile(File file) throws IOException {
+    /**
+     * Compiles the given file.
+     *
+     * @param file The source file to compile.
+     * @throws IOException There was an error reading the given file or writing the output file.
+     */
+    public static void compile(final File file) throws IOException {
         FileInputStream in = new FileInputStream(file);
 
-        // TODO Init program with Antlr visitor
+        otldRailroad parser = otldRailroad.parseFile(in);
 
-        Program program = null;
+        handleCompileErrors(parser.getErrors());
+
+        Program program = parser.getProgram();
 
         // Compile program to bytecode
         Compiler compiler = new BytecodeCompiler(program);
@@ -82,6 +94,16 @@ public class Main {
         // Write program bytecode
         out.write(compiler.asByteArray());
         out.close();
+    }
+
+    /**
+     * Prints every error to stderr.
+     * @param errors The errors.
+     */
+    public static void handleCompileErrors(final List<Error> errors) {
+        for (Error error : errors) {
+            System.err.println(error.getError());
+        }
     }
 
     /**
