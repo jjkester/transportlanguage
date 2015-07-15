@@ -1,6 +1,74 @@
 \chapter{Complete test program}
 \label{chap:testprogram}
 
-% TODO
+\begin{landscape}
 \begin{lstlisting}
+City Enschede;
+
+/** Correctly working program, still need to think of something to do with char. */
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+    Wagon c accepts char;
+    Wagon d accepts int;
+End depot;
+
+Begin track;
+    Signal s is red;
+    Signal s2 is red;
+    Signal s3 is green;
+
+    Waypoint w;
+    Begin waypoint;
+        Write "Passed waypoint " w to journal;
+    End waypoint;
+End track;
+
+Begin industry;
+    Factory notLessThanOrEquals accepts int, int produces boolean;
+
+    Begin production;
+        Transport platform1, platform2 to factory complte and fully load platform3;
+        Turn wagon platform3 around;
+
+        Final product platform3;
+    End production;
+End industry;
+
+Begin company;
+    Ask control "a=?" about contents of a;
+    Load 0 into wagon d;
+
+    Transport a,d to factory compgt and fully load s;
+
+    Approach signal s;
+        Case green:
+            Load 0 into wagon d;
+        Case red:
+            Stop;
+        Case green:
+            Switch signal s;
+    Pass signal;
+
+    Load 1 into wagon d;
+    Load 'c' into wagon c;
+
+    Transport a,a to factory notLessThanOrEquals and fully load b;
+    Transport a,a to factory notLessThanOrEquals and set signal s2;
+
+    Begin circle w;
+        Transport a,d to factory subtract and fully load a;
+        Transport a,d to factory notLessThanOrEquals and set signal w;
+    End circle;
+
+    Write "a=" a to journal;
+    Write "b=" b to journal;
+    Write "c=" c to journal;
+    Write "d=" d to journal;
+
+    Write "s=" s to journal;
+    Write "s2=" s2 to journal;
+    Write "s3=" s3 to journal;
+End company;
 \end{lstlisting}
+\end{landscape}
