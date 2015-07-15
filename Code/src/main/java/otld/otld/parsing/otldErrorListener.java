@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class otldErrorListener extends BaseErrorListener {
     /** List of encountered syntax errors. */
-    private List<String> errors;
+    private List<Error> errors;
 
     public otldErrorListener() {
         this.errors = new ArrayList<>();
@@ -26,12 +26,12 @@ public class otldErrorListener extends BaseErrorListener {
                           charPositionInLine,
                           ErrorMsg.SYNTAXERROR.getMessage(),
                           offendingSymbol.toString().charAt(0)
-                ).getError()
+                )
         );
     }
 
     /** Returns the list of syntax errors that were encountered during parsing. */
-    public List<String> getErrors() {
+    public List<Error> getErrors() {
         return this.errors;
     }
 }

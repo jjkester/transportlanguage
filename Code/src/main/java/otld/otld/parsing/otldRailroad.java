@@ -62,14 +62,16 @@ public class otldRailroad extends otldBaseListener {
         parser.addErrorListener(errorListener);
         ParseTree tree = parser.program();
 
+        otldRailroad railroad = new otldRailroad();
+
         if (errorListener.getErrors().isEmpty()) {
-            otldRailroad railroad = new otldRailroad();
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(railroad, tree);
-
-            return railroad;
+        } else {
+            railroad.errors.addAll(errorListener.getErrors());
         }
-        return null;
+
+        return railroad;
     }
 
     /** Returns all of the errors encountered during parsing. */
