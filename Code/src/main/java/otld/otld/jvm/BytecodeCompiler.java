@@ -45,12 +45,6 @@ public class BytecodeCompiler extends Compiler {
     /** Variables with an initial value. */
     private Set<Variable> initialVariables;
 
-    /** The number of local variables used. */
-    private int maxLocal = 16; // Sane default
-
-    /** The number of stack positions used. */
-    private int maxStack = 16; // Sane default
-
     /**
      * Creates a new compiler for Java bytecode.
      * @param program The program to compile.
@@ -80,7 +74,7 @@ public class BytecodeCompiler extends Compiler {
      */
     public void compileDebug() {
         // Set debug visitor
-        this.visitor = new CheckClassAdapter(this.writer);
+        this.visitor = new CheckClassAdapter(this.writer, false);
 
         // Call compile as normal
         this.compile();
@@ -297,7 +291,7 @@ public class BytecodeCompiler extends Compiler {
         this.visitOperationSequence(function.getBody());
 
         // End method body
-        this.methodVisitor.visitMaxs(this.maxStack, this.maxLocal);
+        this.methodVisitor.visitMaxs(0, 0);
         this.methodVisitor.visitEnd();
     }
 
@@ -558,7 +552,7 @@ public class BytecodeCompiler extends Compiler {
         // Void return
         this.methodVisitor.visitInsn(Opcodes.RETURN);
 
-        this.methodVisitor.visitMaxs(this.maxStack, this.maxLocal);
+        this.methodVisitor.visitMaxs(0, 0);
         this.methodVisitor.visitEnd();
     }
 
@@ -590,7 +584,7 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitInsn(Opcodes.RETURN);
 
         // End main method code
-        this.methodVisitor.visitMaxs(this.maxStack, this.maxLocal);
+        this.methodVisitor.visitMaxs(0, 0);
         this.methodVisitor.visitEnd();
 
         // Restore object location
