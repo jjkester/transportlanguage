@@ -1,7 +1,9 @@
 package otld.otld.intermediate;
 
 /**
- * Break in a program. Will exit the current block or terminate the program if not in a block.
+ * A break statement.
+ *
+ * A break will exit the current block or terminate the program if not in a block.
  */
 public class Break extends Operation {
     public Break() {}

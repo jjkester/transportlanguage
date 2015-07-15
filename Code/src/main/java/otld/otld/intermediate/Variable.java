@@ -5,12 +5,14 @@ import otld.otld.intermediate.exceptions.TypeMismatch;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * A variable in the program.
+ * A variable.
  *
- * A variable has a type parameter which indicates the Java class to use for values.
+ * A variable has a signature which indicates the Java class to use for values.
  *
  * A variable has a required identifier and type. A variable might have an initial value, which is saved here.
- * Computation and storage of the actual value is left to the target language.
+ * Computation and storage of the actual value is (obviously) left to the target language.
+ *
+ * It is recommended to create new variables using the factory method.
  *
  * @param <T> The Java type of the values for this variable.
  */

@@ -1,7 +1,7 @@
 package otld.otld.intermediate;
 
 /**
- * Specialization of Element for operations.
+ * Base class for operations.
  */
 public abstract class Operation extends Element {
 }

@@ -1,7 +1,9 @@
 package otld.otld.intermediate;
 
 /**
- * Assignment in the program.
+ * Base class for assignment operations.
+ *
+ * Declares a destination variable, which is common for all assignments.
  */
 public abstract class Assignment extends Operation {
     /** The variable to which the value is assigned. */

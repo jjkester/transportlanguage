@@ -1,7 +1,9 @@
 package otld.otld.intermediate;
 
 /**
- * Operation to get input from a user. Only accepts input in the correct type for the variable.
+ * Read from stdin.
+ *
+ * Operation to get input from a user. Only accepts input in the correct type for the destination variable.
  */
 public class Input extends Operation {
     /** The destination variable for the input. */

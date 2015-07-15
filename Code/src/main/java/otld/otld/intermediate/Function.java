@@ -7,6 +7,8 @@ import java.util.Map;
  * Function in the program.
  *
  * A function has a unique identifier. A function can have zero or more arguments and always has a single return value.
+ *
+ * A function creates a new variable for each argument. These variables can be used in the scope of the function body.
  */
 public class Function extends Element implements TypedElement {
     /** The unique identifier of this function. */

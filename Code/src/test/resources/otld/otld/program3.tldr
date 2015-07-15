@@ -1,0 +1,22 @@
+City almere;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+End depot;
+
+Begin industry;
+    Factory lol accepts int produces boolean;
+
+    Begin production;
+        Transport platform1 to factory complte and fully load platform2;
+
+        Final product b;
+    End production;
+End industry;
+
+Begin company;
+    Load 11235 into wagon a;
+    Transport a to factory lol and fully load b;
+End company;
+

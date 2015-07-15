@@ -1,7 +1,7 @@
 package otld.otld.intermediate;
 
 /**
- * Conditional statement in the program.
+ * A conditional (if/else) block statement.
  *
  * A conditional has two bodies, one for when the condition is true and one for when the condition is false. The
  * condition is a boolean variable.

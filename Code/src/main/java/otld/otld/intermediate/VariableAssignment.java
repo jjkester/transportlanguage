@@ -3,7 +3,10 @@ package otld.otld.intermediate;
 import otld.otld.intermediate.exceptions.TypeMismatch;
 
 /**
- * Assignment of a variable to another variable in the program.
+ * Variable assignment
+ *
+ * Copies the value of the source variable to the destination variable. Type checking is explicit. It is recommended to
+ * create a variable assignment using the factory method on a variable instance.
  */
 public class VariableAssignment extends Assignment {
     /** The variable which contains the value to assign. */

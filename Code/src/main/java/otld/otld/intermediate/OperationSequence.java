@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Sequence of elements.
+ * List of operations.
  *
- * An in-order sequence of elements that form a program.
+ * An in-order sequence of elements that form a program or method body.
  */
 public class OperationSequence extends LinkedList<Operation> {
     @Override
