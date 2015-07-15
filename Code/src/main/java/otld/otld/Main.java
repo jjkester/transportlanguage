@@ -6,7 +6,7 @@ import otld.otld.jvm.BytecodeCompiler;
 import java.io.*;
 
 /**
- * otld.otld.Main class of the application.
+ * Main class of the application.
  *
  * Ties the different parts together.
  */
