@@ -5,9 +5,20 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{hyperref}
+\usepackage{color}
 
 \newcommand{\code}[1]{{\ttfamily\small #1}}
-\lstset{basicstyle=\ttfamily\small,frame=lines,columns=fullflexible}
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=lines,
+  columns=fullflexible,
+  breaklines=true,                 % automatic line breaking only at whitespace
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  keywordstyle=\color{blue},       % keyword style
+  stringstyle=\color{mymauve}
+}
 
 \newcommand{\name}{Open Transport Language Deluxe }
 \newcommand{\shortname}{\textsc{otld} }
@@ -31,10 +42,16 @@ Martijn Bruning \\
 
 \include{Chapters/Introduction}
 \include{Chapters/Features}
-\include{Chapters/Specification}
 \include{Chapters/Problems}
+\include{Chapters/Specification}
 \include{Chapters/Implementation}
 \include{Chapters/Testplan}
 \include{Chapters/Conclusions}
+
+\appendix
+
+\include{Appendices/Grammar}
+\include{Appendices/Treewalkers}
+\include{Appendices/Testprogram}
 
 \end{document}
