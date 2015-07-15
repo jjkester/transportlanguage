@@ -27,7 +27,7 @@ public class Call extends Operation {
         this.function = function;
         this.args = args;
 
-        if (!function.validateInput(this.getArgs()) || !function.getType().worksWith(this.getDestination().getType())) {
+        if (!function.validateInput(this.getArgs()) || !function.getType().worksWith(this.getTarget().getType())) {
             throw new TypeMismatch();
         }
     }
@@ -49,12 +49,12 @@ public class Call extends Operation {
     /**
      * @return The variable containing the result of this call.
      */
-    public final Variable getDestination() {
+    public final Variable getTarget() {
         return this.args[this.args.length - 1];
     }
 
     @Override
     public final String toString() {
-        return String.format("Call %s ( %s ) -> %s", this.getFunction(), Joiner.on(", ").join(this.getArgs()), this.getDestination());
+        return String.format("Call %s ( %s ) -> %s", this.getFunction(), Joiner.on(", ").join(this.getArgs()), this.getTarget());
     }
 }

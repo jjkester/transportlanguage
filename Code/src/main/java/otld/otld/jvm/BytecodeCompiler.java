@@ -192,7 +192,7 @@ public class BytecodeCompiler extends Compiler {
         this.visitOperator(application.getOperator());
 
         // Store result
-        this.visitStoreVariable(application.getDestination());
+        this.visitStoreVariable(application.getTarget());
     }
 
     /**
@@ -279,7 +279,7 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, this.program.getId(), call.getFunction().getId(), ASM.getASMMethodType(call.getFunction().getType(), call.getFunction().getArgTypes()).getDescriptor(), false);
 
         // Store result in variable
-        this.visitStoreVariable(call.getDestination());
+        this.visitStoreVariable(call.getTarget());
     }
 
     /**
@@ -383,7 +383,7 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(String.class)), false);
 
         // Consume scanner and put input value on stack
-        switch (input.getDestination().getType()) {
+        switch (input.getTarget().getType()) {
             case BOOL:
                 this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/util/Scanner", "nextBoolean", Type.getMethodDescriptor(Type.BOOLEAN_TYPE), false);
                 break;
@@ -404,7 +404,7 @@ public class BytecodeCompiler extends Compiler {
         }
 
         // Store input in variable
-        this.visitStoreVariable(input.getDestination());
+        this.visitStoreVariable(input.getTarget());
     }
 
     /**
@@ -758,7 +758,7 @@ public class BytecodeCompiler extends Compiler {
     @Override
     protected void visitValueAssignment(ValueAssignment assignment) {
         // Put value on stack for different types
-        switch (assignment.getDestination().getType()) {
+        switch (assignment.getTarget().getType()) {
             case BOOL:
                 this.visitIntConst(((boolean) assignment.getValue()) ? 1 : 0); // True = 1, False = 0
                 break;
@@ -773,7 +773,7 @@ public class BytecodeCompiler extends Compiler {
         }
 
         // Store value to variable
-        this.visitStoreVariable(assignment.getDestination());
+        this.visitStoreVariable(assignment.getTarget());
     }
 
     /**
@@ -808,7 +808,7 @@ public class BytecodeCompiler extends Compiler {
         this.visitLoadVariable(assignment.getSource());
 
         // Store value to destination variable
-        this.visitStoreVariable(assignment.getDestination());
+        this.visitStoreVariable(assignment.getTarget());
     }
 
     /**

@@ -31,12 +31,12 @@ public class Input extends Operation {
     /**
      * @return The destination variable for the input.
      */
-    public final Variable getDestination() {
+    public final Variable getTarget() {
         return this.destination;
     }
 
     @Override
     public final String toString() {
-        return String.format("Input \"%s\" -> %s", this.getQuery(), this.getDestination());
+        return String.format("Input \"%s\" -> %s", this.getQuery(), this.getTarget());
     }
 }
