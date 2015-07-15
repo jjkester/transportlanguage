@@ -1,0 +1,22 @@
+City contextConstraints;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+End depot;
+
+Begin company;
+    Load 11235 into wagon c;
+    Load 11235 into wagon b;
+
+    Transfer wagon a to wagon a;
+    Transfer wagon a, a to wagon b;
+
+    Transport a, a, a, b to factory multiply and fully load a;
+    Transport b, b to factory add and fully load b;
+
+    Transport b, a to factory complte and fully load b;
+
+    Write "" a to journal;
+    Write "" b to journal
+End company;

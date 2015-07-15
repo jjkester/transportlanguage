@@ -1,0 +1,12 @@
+City spellingAndContext;
+
+Begin depot;
+    Waagon a accepts int;
+    Wagon b akcepts boolean;
+End depot;
+
+Begin company;
+    Load 11235 into wagon a;
+    Load red into wagon b;
+    Transfer wagon a to wagon a;
+End company;
