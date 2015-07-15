@@ -33,6 +33,7 @@ End industry;
 Begin company;
     Load 25 into wagon a;
     Load 1 into wagon d;
+    Load 'c' into wagon c;
 
     Transport a,a to factory notLessThanOrEquals and fully load b;
     Transport a,a to factory notLessThanOrEquals and set signal s2;
@@ -41,4 +42,13 @@ Begin company;
         Transport a,d to factory SUBTRACT and fully load a;
         Transport a,d to factory notLessThanOrEquals and set signal w;
     End circle;
+
+    Write "" a to journal;
+    Write "" b to journal;
+    Write "" c to journal;
+    Write "" d to journal;
+
+    Write "" s to journal;
+    Write "" s2 to journal;
+    Write "" s3 to journal;
 End company;
