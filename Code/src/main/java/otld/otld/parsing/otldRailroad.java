@@ -82,7 +82,7 @@ public class otldRailroad extends otldBaseListener {
     }
 
     /** Returns all of the errors encountered during parsing. */
-    public List getErrors() {
+    public List<Error> getErrors() {
         return errors;
     }
 
