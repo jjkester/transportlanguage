@@ -16,8 +16,73 @@ The compiler has been tested with a number of test programs. The first program i
 
 All other test programs are located in \code{Code/src/test/resources/otld/otld/} and are discussed below.
 
-\begin{itemize}
-\item
-	\code{test.tldr} \\
-	Description including compiler output
-\end{itemize}
+Complex structures (conditionals, loops, etc.) are tested in our first, correct test program.
+
+\subsubsection*{\code{Almere.tldr}}
+Tests error reporting. Expected errors include `variable not defined', `factory already defined' and `type mismatch'. This test program is also used for a unit test. \\
+\\
+Compiler output:
+\begin{lstlisting}
+Error at line:17:12: This factory has already been defined!
+Error at line:20:22: This variable has not been defined!
+Error at line:20:33: This variable has not been defined!
+Error at line:20:77: This variable has not been defined!
+Error at line:20:22: These types do not match!
+Error at line:22:26: This variable has not been defined!
+Error at line:27:26: This variable has not been defined!
+\end{lstlisting}
+
+\subsubsection*{\code{Amsterdam.tldr}}
+Tests error reporting. Expected errors include `variable already defined' and `type mismatch'. This test program is also used for a unit test. \\
+\\
+Compiler output:
+\begin{lstlisting}
+Error at line:6:10: This variable has already been defined!
+Error at line:12:19: These types do not match!
+\end{lstlisting}
+
+\subsubsection*{\code{Maastricht.tldr}}
+Tests error reporting. A syntax error is expected. While the program has more errors than just this, only the syntax error is returned since there is no valid tree due to the syntax error. This test program is also used for a unit test. \\
+\\
+Compiler output:
+\begin{lstlisting}
+Error at line:6:20: Syntax error on:mismatched input 'bool' expecting CARGO
+\end{lstlisting}
+
+\subsubsection*{\code{Nijmegen.tldr}}
+Tests error reporting. Expected errors include `reserved name' and `factory not defined'. This test program is also used for a unit test. \\
+\\
+Compiler output:
+\begin{lstlisting}
+Error at line:6:10: The ID name is a reserved name and cannot be used!
+Error at line:10:27: This factory has not been defined!
+\end{lstlisting}
+
+\subsubsection*{\code{contextConstraints.tldr}}
+Tests context constraint errors like type errors including an incorrect number of arguments. \\
+\\
+Compiler output:
+\begin{lstlisting}
+Error at line:9:26: This variable has not been defined!
+Error at line:13:19: These types do not match!
+Error at line:15:14: These types do not match!
+Error at line:16:14: These types do not match!
+Error at line:18:14: These types do not match!
+\end{lstlisting}
+
+\subsubsection*{\code{runtimeErrors.tldr}}
+Tests runtime errors. There is no compiler output since it should compile without error. However, there is runtime output. \\
+\\
+Runtime output:
+\begin{lstlisting}
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at runtimeErrors.main(Unknown Source)
+\end{lstlisting}
+
+\subsubsection*{\code{spellingAndContext.tldr}}
+Tests spelling and context constraint errors. \\
+\\
+Compiler output:
+\begin{lstlisting}
+Error at line:4:4: Syntax error on:mismatched input 'Waagon' expecting {'End', 'Wagon'}
+\end{lstlisting}
