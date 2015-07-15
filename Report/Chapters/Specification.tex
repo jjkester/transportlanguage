@@ -17,6 +17,13 @@ A city consists of a number of blocks, each containing integral parts of the pro
 \item \code{company}: This block should contain the program itself.
 \end{itemize}
 
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.25]{Images/city_and_depot}
+\caption{City and depot}
+\label{fig:city_and_depot}
+\end{figure}
+
 \subsubsection*{Example}
 
 \begin{lstlisting}
@@ -118,25 +125,25 @@ For variable assignments, the value of a field is loaded on the stack and direct
 There are two unary operations with each a special syntax:
 
 \begin{itemize}
-\item Unary minus: Inverts a wagon. \\ \code{Turn wagon <id> around;}
+\item Unary minus: Inverts a wagon (integer, boolean). \\ \code{Turn wagon <id> around;}
 \item Not (for signals): Inverts a signal. \\ \code{Switch signal <id>;}
 \end{itemize}
 
 The other operations use the statement \code{Transport <id>, <id> to factory <op> and fully load <id>;}. The first to occurances of \code{<id>} are the left- and righthand variables for the operation, the third \code{<id>} is the destination wagon. The operation \code{<op>} can be any of the following:
 
 \begin{itemize}
-\item Addition: \code{add}
-\item Subtraction: \code{subtract}
-\item Multiplication: \code{multiply}
-\item Division: \code{divide}
-\item Modulo division: \code{modulo}
-\item Less than: \code{complt}
-\item Greater than: \code{compgt}
-\item Less than or equal: \code{complte}
-\item Greater than or equal: \code{compgte}
-\item Equal: \code{compeq}
-\item Logical and: \code{and}
-\item Logical or: \code{or}
+\item Addition: \code{add} (integer, integer $\to$ integer)
+\item Subtraction: \code{subtract} (integer, integer $\to$ integer)
+\item Multiplication: \code{multiply} (integer, integer $\to$ integer)
+\item Division: \code{divide} (integer, integer $\to$ integer)
+\item Modulo division: \code{modulo} (integer, integer $\to$ integer)
+\item Less than: \code{complt} (any, any $\to$ boolean)
+\item Greater than: \code{compgt} (any, any $\to$ boolean)
+\item Less than or equal: \code{complte} (any, any $\to$ boolean)
+\item Greater than or equal: \code{compgte} (any, any $\to$ boolean)
+\item Equal: \code{compeq} (any, any $\to$ boolean)
+\item Logical and: \code{and} (bool|int, bool|int $\to$ bool|int)
+\item Logical or: \code{or} (bool|int, bool|int $\to$ bool|int)
 \end{itemize}
 
 The operations that return a boolean can be used in two ways; either as mentioned above or with the statement \code{Transport <id>, <id> to factory <op> and set signal <id>;} to store the boolean in a signal.
@@ -186,6 +193,13 @@ The code that should be executed in each iteration should be in a circle block s
 
 Since waypoints are a special case of signals, all normal operations for signals can be used with waypoints.
 
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.25]{Images/circle}
+\caption{Circle with waypoint}
+\label{fig:circle}
+\end{figure}
+
 \subsubsection*{Example}
 
 \begin{lstlisting}
@@ -211,6 +225,13 @@ A loop has a condition body (the \code{waypoint} block) and the real body (the \
 Functions are represented as \emph{factories}. Factories can be defined in the \code{industry} city block using the statement \code{Factory <id> accepts <type>[, <type>]* produces <type>;}, where \code{<id>} is the name of the factory and \code{<type>} is one of the supported variable types. This statement should be directly followed by a \code{production} block for the body of the function. This block should always end with \code{Final product <var>;}, which returns \code{<var>}. Returns are only allowed at this spot. The arguments can be accessed in the function body using \code{platformX} as variable name, where \code{X} is the 1-indexed argument index.
 
 A function can be called similarly to an arithmetic operation with the \code{Transport <id>, <id> to factory <op> and fully load <id>;} statement where \code{<op>} is the factory name.
+
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.25]{Images/factory}
+\caption{Factory}
+\label{fig:factory}
+\end{figure}
 
 \subsubsection*{Example}
 
