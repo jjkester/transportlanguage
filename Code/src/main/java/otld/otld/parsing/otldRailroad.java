@@ -1,15 +1,25 @@
 package otld.otld.parsing;
 
 import javafx.collections.transformation.SortedList;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import otld.otld.grammar.otldBaseListener;
+import otld.otld.grammar.otldLexer;
 import otld.otld.grammar.otldParser;
 import otld.otld.intermediate.*;
 import otld.otld.intermediate.exceptions.FunctionAlreadyDeclared;
 import otld.otld.intermediate.exceptions.TypeMismatch;
 import otld.otld.intermediate.exceptions.VariableAlreadyDeclared;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
@@ -31,6 +41,48 @@ public class otldRailroad extends otldBaseListener {
     Map<Variable, OperationSequence> waypoints;
     /** The last function we encountered during parsing, this is nulled after each factory exit. */
     Function lastFunction = null;
+
+    /**
+     * Parses the supplied input using the otldRailroad and returns it after walking it
+     * @param reader input to parse
+     * @return walked otldRailroad
+     * @throws IOException
+     */
+    public static otldRailroad parseFile(InputStream reader) throws IOException {
+        otldErrorListener errorListener = new otldErrorListener();
+        ANTLRInputStream stream = new ANTLRInputStream(reader);
+
+        Lexer lexer = new otldLexer(stream);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
+        TokenStream tokens = new CommonTokenStream(lexer);
+
+        otldParser parser = new otldParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(errorListener);
+        ParseTree tree = parser.program();
+
+        otldRailroad railroad = new otldRailroad();
+
+        if (errorListener.getErrors().isEmpty()) {
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(railroad, tree);
+        } else {
+            railroad.errors.addAll(errorListener.getErrors());
+        }
+
+        return railroad;
+    }
+
+    /** Returns all of the errors encountered during parsing. */
+    public SortedList getErrors() {
+        return errors;
+    }
+
+    /** Returns the program. */
+    public Program getProgram() {
+        return city;
+    }
 
     /** Returns the system type of that is identified by the passed string. */
     public Type getType(String ctxType) {
