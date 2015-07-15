@@ -25,7 +25,7 @@ public class otldErrorListener extends BaseErrorListener {
                 new Error(line,
                           charPositionInLine,
                           ErrorMsg.SYNTAXERROR.getMessage(),
-                          offendingSymbol.toString().charAt(0)
+                          msg
                 )
         );
     }

@@ -12,7 +12,7 @@ public class Error {
     /** Message that indicates what kind of error occurred. See ErrorMsg for common messages.*/
     private String message;
     /** Symbol that caused the syntax error (if such an error occurred)*/
-    private Character symbol;
+    private String symbol;
 
     /**
      * Create an error object that is capable of returning a formatted error message
@@ -22,7 +22,7 @@ public class Error {
      * @param message
      */
     public Error (int line, int charpos, String message) {
-        this(line, charpos, message, '\0');
+        this(line, charpos, message, null);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Error {
      * @param message
      * @param symbol
      */
-    public Error (int line, int charpos, String message, Character symbol) {
+    public Error (int line, int charpos, String message, String symbol) {
         this.line = line;
         this.charpos = charpos;
         this.message = message;
@@ -46,8 +46,8 @@ public class Error {
         StringBuilder out = new StringBuilder();
         out.append(String.format("Error at line:%d:%d: %s", line, charpos, message));
 
-        if (this.symbol != '\0') {
-            out.append(String.format(" (Symbol %s)", symbol));
+        if (this.symbol != null) {
+            out.append(String.format("%s)", symbol));
         }
 
         return out.toString();

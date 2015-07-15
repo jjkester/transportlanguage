@@ -1,4 +1,4 @@
-City enschede;
+City Enschede;
 
 /** Correctly working program, still need to think of something to do with char. */
 Begin depot;
@@ -39,7 +39,7 @@ Begin company;
     Transport a,a to factory notLessThanOrEquals and set signal s2;
 
     Begin circle w;
-        Transport a,d to factory SUBTRACT and fully load a;
+        Transport a,d to factory subtract and fully load a;
         Transport a,d to factory notLessThanOrEquals and set signal w;
     End circle;
 

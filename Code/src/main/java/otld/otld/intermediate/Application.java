@@ -43,7 +43,7 @@ public class Application extends Operation {
      * @return The variables that are the arguments of the operator.
      */
     public final Variable[] getArgs() {
-        return Arrays.copyOf(this.args, this.args.length - 1);
+        return this.args.length > 0 ? Arrays.copyOf(this.args, this.args.length - 1) : new Variable[0];
     }
 
     /**
