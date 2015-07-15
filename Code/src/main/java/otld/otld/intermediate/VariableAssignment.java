@@ -13,14 +13,14 @@ public class VariableAssignment extends Assignment {
     private Variable source;
 
     /**
-     * @param destination The variable to which the value is assigned.
+     * @param target The variable to which the value is assigned.
      * @param source The variable which contains the value to assign.
-     * @throws TypeMismatch The types of the source and destination variables do not match.
+     * @throws TypeMismatch The types of the source and target variables do not match.
      */
-    public VariableAssignment(final Variable destination, final Variable source) throws TypeMismatch {
-        super(destination);
+    public VariableAssignment(final Variable target, final Variable source) throws TypeMismatch {
+        super(target);
 
-        if (!destination.getType().equals(source.getType())) {
+        if (!target.getType().equals(source.getType())) {
             throw new TypeMismatch();
         }
 
@@ -36,6 +36,6 @@ public class VariableAssignment extends Assignment {
 
     @Override
     public final String toString() {
-        return String.format("Assign ( %s ) -> %s", this.getSource(), this.getDestination());
+        return String.format("Assign ( %s ) -> %s", this.getSource(), this.getTarget());
     }
 }

@@ -17,6 +17,6 @@ public class InputTest {
     public void testGetDestination() throws Exception {
         Variable<Integer> intVar = new Variable<Integer>(Type.INT, "i", null);
         Input in = new Input("Enter a number: ", intVar);
-        assertEquals(intVar, in.getDestination());
+        assertEquals(intVar, in.getTarget());
     }
 }

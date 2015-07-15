@@ -6,7 +6,6 @@ import otld.otld.parsing.*;
 import otld.otld.parsing.Error;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -76,7 +75,7 @@ public class Main {
     public static void compile(final File file) throws IOException {
         FileInputStream in = new FileInputStream(file);
 
-        otldRailroad parser = otldRailroad.parseFile(in);
+        OTLDListener parser = OTLDListener.parseFile(in);
 
         handleCompileErrors(parser.getErrors());
 

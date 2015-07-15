@@ -12,7 +12,7 @@ public class VariableAssignmentTest {
         Variable v = Variable.create(Type.INT, "v", null);
         Variable w = Variable.create(Type.INT, "w", "42");
         VariableAssignment vw = new VariableAssignment(v, w);
-        assertEquals(v, vw.getDestination());
+        assertEquals(v, vw.getTarget());
     }
 
     @Test

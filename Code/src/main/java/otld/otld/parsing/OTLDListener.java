@@ -1,6 +1,5 @@
 package otld.otld.parsing;
 
-import javafx.collections.transformation.SortedList;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
@@ -17,13 +16,12 @@ import otld.otld.intermediate.exceptions.FunctionAlreadyDeclared;
 import otld.otld.intermediate.exceptions.TypeMismatch;
 import otld.otld.intermediate.exceptions.VariableAlreadyDeclared;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 /** Base visitor for the OTLD intermediate representation. */
-public class otldRailroad extends otldBaseListener {
+public class OTLDListener extends otldBaseListener {
 
     /** The program that is being parsed by this visitor. */
     private Program city;
@@ -40,7 +38,7 @@ public class otldRailroad extends otldBaseListener {
     /** The last function we encountered during parsing, this is nulled after each factory exit. */
     Function lastFunction;
 
-    public otldRailroad() {
+    public OTLDListener() {
         this.functions = new ParseTreeProperty<>();
         this.conditionals = new ParseTreeProperty<>();
         this.stack = new Stack<>();
@@ -50,13 +48,13 @@ public class otldRailroad extends otldBaseListener {
     }
 
     /**
-     * Parses the supplied input using the otldRailroad and returns it after walking it
+     * Parses the supplied input using the OTLDListener and returns it after walking it
      * @param reader input to parse
-     * @return walked otldRailroad
+     * @return walked OTLDListener
      * @throws IOException
      */
-    public static otldRailroad parseFile(InputStream reader) throws IOException {
-        otldErrorListener errorListener = new otldErrorListener();
+    public static OTLDListener parseFile(InputStream reader) throws IOException {
+        OTLDErrorListener errorListener = new OTLDErrorListener();
         ANTLRInputStream stream = new ANTLRInputStream(reader);
 
         Lexer lexer = new otldLexer(stream);
@@ -69,7 +67,7 @@ public class otldRailroad extends otldBaseListener {
         parser.addErrorListener(errorListener);
         ParseTree tree = parser.program();
 
-        otldRailroad railroad = new otldRailroad();
+        OTLDListener railroad = new OTLDListener();
 
         if (errorListener.getErrors().isEmpty()) {
             ParseTreeWalker walker = new ParseTreeWalker();

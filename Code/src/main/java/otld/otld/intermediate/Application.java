@@ -27,7 +27,7 @@ public class Application extends Operation {
         this.operator = operator;
         this.args = args;
 
-        if (!operator.validateInput(this.getArgs()) || !operator.getType().worksWith(this.getVariable().getType())) {
+        if (!operator.validateInput(this.getArgs()) || !operator.getType().worksWith(this.getTarget().getType())) {
             throw new TypeMismatch();
         }
     }
@@ -49,12 +49,12 @@ public class Application extends Operation {
     /**
      * @return The variable containing the result of this application.
      */
-    public final Variable getVariable() {
+    public final Variable getTarget() {
         return this.args[this.args.length - 1];
     }
 
     @Override
     public final String toString() {
-        return String.format("Apply %s ( %s ) -> %s", this.getOperator(), Joiner.on(", ").join(this.getArgs()), this.getVariable());
+        return String.format("Apply %s ( %s ) -> %s", this.getOperator(), Joiner.on(", ").join(this.getArgs()), this.getTarget());
     }
 }

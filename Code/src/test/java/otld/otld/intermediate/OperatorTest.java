@@ -16,7 +16,7 @@ public class OperatorTest {
     @Test
     public void testGetArgs() throws Exception {
         Type[] args = {Type.ANY, Type.ANY};
-        assertArrayEquals(args, Operator.EQUALS.getArgs());
+        assertArrayEquals(args, Operator.EQUALS.getArgTypes());
     }
 
     @Test

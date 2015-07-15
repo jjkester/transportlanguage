@@ -55,7 +55,7 @@ public enum Operator implements TypedElement {
     /**
      * @return The types of the arguments without the return type.
      */
-    public final Type[] getArgs() {
+    public final Type[] getArgTypes() {
         return Arrays.copyOf(this.args, this.args.length - 1);
     }
 
@@ -74,7 +74,7 @@ public enum Operator implements TypedElement {
      * @return Whether the given variables are valid arguments for this operator.
      */
     public final boolean validateInput(final Variable ... input) {
-        final Type[] args = this.getArgs();
+        final Type[] args = this.getArgTypes();
 
         if (args.length == input.length) {
             for (int i = 0; i < args.length; i++) {

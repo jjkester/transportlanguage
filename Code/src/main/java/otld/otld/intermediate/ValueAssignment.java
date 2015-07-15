@@ -13,11 +13,11 @@ public class ValueAssignment<T> extends Assignment {
     private T value;
 
     /**
-     * @param destination The variable to which the value is assigned.
+     * @param target The variable to which the value is assigned.
      * @param value The value to assign.
      */
-    public ValueAssignment(final Variable<T> destination, final T value) {
-        super(destination);
+    public ValueAssignment(final Variable<T> target, final T value) {
+        super(target);
         this.value = value;
     }
 
@@ -30,6 +30,6 @@ public class ValueAssignment<T> extends Assignment {
 
     @Override
     public final String toString() {
-        return String.format("Assign ( %s ) -> %s", this.getValue(), this.getDestination());
+        return String.format("Assign ( %s ) -> %s", this.getValue(), this.getTarget());
     }
 }

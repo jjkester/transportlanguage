@@ -17,6 +17,6 @@ public class ValueAssignmentTest {
     public void testGetDestination() throws Exception {
         Variable v = Variable.create(Type.INT, "v", null);
         ValueAssignment v42 = new ValueAssignment<Integer>(v, 42);
-        assertEquals(v, v42.getDestination());
+        assertEquals(v, v42.getTarget());
     }
 }

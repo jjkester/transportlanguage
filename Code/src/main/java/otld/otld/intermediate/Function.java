@@ -1,7 +1,6 @@
 package otld.otld.intermediate;
 
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  * Function in the program.
@@ -63,7 +62,7 @@ public class Function extends Element implements TypedElement {
      * @return Whether the given variables are valid arguments for this function.
      */
     public final boolean validateInput(final Variable ... input) {
-        final Type[] args = this.getArgs();
+        final Type[] args = this.getArgTypes();
 
         if (args.length == input.length) {
             for (int i = 0; i < args.length; i++) {
@@ -87,7 +86,7 @@ public class Function extends Element implements TypedElement {
     /**
      * @return The arguments for this function.
      */
-    public final Type[] getArgs() {
+    public final Type[] getArgTypes() {
         return Arrays.copyOf(this.args, this.args.length - 1);
     }
 
