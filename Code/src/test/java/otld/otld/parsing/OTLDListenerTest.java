@@ -74,7 +74,7 @@ public class OTLDListenerTest {
      * Test the working of a valid otld program.
      */
     public void testProgram1() throws Exception {
-        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program1.tldr").getPath());
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("Enschede.tldr").getPath());
         OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -127,7 +127,7 @@ public class OTLDListenerTest {
      * a type mismatch error.
      */
     public void testProgram2() throws Exception {
-        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program2.tldr").getPath());
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("Amsterdam.tldr").getPath());
         OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -146,7 +146,7 @@ public class OTLDListenerTest {
      * a type mismatch error.
      */
     public void testProgram3() throws Exception {
-        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program3.tldr").getPath());
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("Almere.tldr").getPath());
         OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -169,7 +169,7 @@ public class OTLDListenerTest {
      * since syntax errors will stop the walking of the tree
      */
     public void testProgram4() throws Exception {
-        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program4.tldr").getPath());
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("Maastricht.tldr").getPath());
         OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -184,7 +184,7 @@ public class OTLDListenerTest {
      * We expect a reserved name and factory undefined error
      */
     public void testProgram5() throws Exception {
-        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program5.tldr").getPath());
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("Nijmegen.tldr").getPath());
         OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 

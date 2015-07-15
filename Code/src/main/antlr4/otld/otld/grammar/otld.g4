@@ -22,7 +22,7 @@ defwaypoint : 'Waypoint' ID ';' 'Begin' 'Waypoint' ';' code+ 'End' 'Waypoint' ';
 company     : 'Begin''company'';'code*'End''company'';'; // wraps main code
 
 // Main program rules
-code        : defcircle | ifcond | write | stop | load | transfer | transport | invert | unarymin;
+code        : defcircle | ifcond | input | write | stop | load | transfer | transport | invert | unarymin;
 
 //Conditionals
 defcircle   : 'Begin' 'circle' ID ';' code+ 'End' 'circle' ';'; // define execution code for conditional

@@ -1,4 +1,4 @@
-City Maastricht;
+City Nijmegen;
 
 Begin depot;
     Wagon a accepts int;

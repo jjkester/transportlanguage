@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class Main {
     public static final String VERSION = "v0.1";
+    public static final String EXT = "tldr";
 
     /**
      * Main method of the compiler suite.
@@ -47,7 +48,7 @@ public class Main {
         // Collect all file names
         if (args.length > 1) {
             for (int i = 1; i < args.length; i++) {
-                if (!args[i].matches("[a-z][a-zA-Z0-9]*")) {
+                if (!args[i].matches("[a-zA-Z][a-zA-Z0-9]*")) {
                     System.err.println("Invalid program name: " + args[i]);
                     System.exit(1);
                 }
@@ -58,7 +59,7 @@ public class Main {
         // Compile all file names
         for (String filename : filenames) {
             try {
-                File file = new File(filename);
+                File file = new File(filename + "." + EXT);
                 compile(file);
             } catch (IOException e) {
                 System.err.println(String.format("Error with file: %s (%s)", filename, e.getMessage()));
@@ -77,7 +78,10 @@ public class Main {
 
         OTLDListener parser = OTLDListener.parseFile(in);
 
-        handleCompileErrors(parser.getErrors());
+        if (!parser.getErrors().isEmpty()) {
+            handleCompileErrors(parser.getErrors());
+            System.exit(1);
+        }
 
         Program program = parser.getProgram();
 
