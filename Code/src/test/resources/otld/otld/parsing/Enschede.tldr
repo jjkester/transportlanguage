@@ -14,9 +14,9 @@ Begin track;
     Signal s3 is green;
 
     Waypoint w;
-    Begin Waypoint;
-        Write "Passed waypoint" s to journal;
-    End Waypoint;
+    Begin waypoint;
+        Write "Passed waypoint " w to journal;
+    End waypoint;
 End track;
 
 Begin industry;
@@ -31,7 +31,20 @@ Begin industry;
 End industry;
 
 Begin company;
-    Load 25 into wagon a;
+    Ask control "a=?" about contents of a;
+    Load 0 into wagon d;
+
+    Transport a,d to factory compgt and fully load s;
+
+    Approach signal s;
+        Case green:
+            Load 0 into wagon d;
+        Case red:
+            Stop;
+        Case green:
+            Switch signal s;
+    Pass signal;
+
     Load 1 into wagon d;
     Load 'c' into wagon c;
 
@@ -43,12 +56,12 @@ Begin company;
         Transport a,d to factory notLessThanOrEquals and set signal w;
     End circle;
 
-    Write "" a to journal;
-    Write "" b to journal;
-    Write "" c to journal;
-    Write "" d to journal;
+    Write "a=" a to journal;
+    Write "b=" b to journal;
+    Write "c=" c to journal;
+    Write "d=" d to journal;
 
-    Write "" s to journal;
-    Write "" s2 to journal;
-    Write "" s3 to journal;
+    Write "s=" s to journal;
+    Write "s2=" s2 to journal;
+    Write "s3=" s3 to journal;
 End company;

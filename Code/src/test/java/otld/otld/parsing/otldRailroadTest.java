@@ -74,7 +74,7 @@ public class otldRailroadTest {
      * Test the working of a valid otld program.
      */
     public void testProgram1() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program1.tldr").getPath());
+        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("Enschede.tldr").getPath());
         otldRailroad railroad = otldRailroad.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -127,7 +127,7 @@ public class otldRailroadTest {
      * a type mismatch error.
      */
     public void testProgram2() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program2.tldr").getPath());
+        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("Amsterdam.tldr").getPath());
         otldRailroad railroad = otldRailroad.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -146,7 +146,7 @@ public class otldRailroadTest {
      * a type mismatch error.
      */
     public void testProgram3() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program3.tldr").getPath());
+        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("Almere.tldr").getPath());
         otldRailroad railroad = otldRailroad.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -169,7 +169,7 @@ public class otldRailroadTest {
      * since syntax errors will stop the walking of the tree
      */
     public void testProgram4() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program4.tldr").getPath());
+        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("Maastricht.tldr").getPath());
         otldRailroad railroad = otldRailroad.parseFile(stream);
         Program city = railroad.getProgram();
 
@@ -184,7 +184,7 @@ public class otldRailroadTest {
      * We expect a reserved name and factory undefined error
      */
     public void testProgram5() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program5.tldr").getPath());
+        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("Nijmegen.tldr").getPath());
         otldRailroad railroad = otldRailroad.parseFile(stream);
         Program city = railroad.getProgram();
 

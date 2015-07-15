@@ -300,7 +300,7 @@ public class BytecodeCompiler extends Compiler {
         final Label labelEnd = new Label();
 
         // Set break target
-        this.breakTargets.push(labelEnd);
+//        this.breakTargets.push(labelEnd);
 
         // Put condition onto stack
         this.visitLoadVariable(conditional.getCondition());
@@ -324,7 +324,7 @@ public class BytecodeCompiler extends Compiler {
         this.methodVisitor.visitLabel(labelEnd);
 
         // Unset break target
-        this.breakTargets.pop();
+//        this.breakTargets.pop();
     }
 
     /**
