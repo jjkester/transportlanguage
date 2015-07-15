@@ -12,6 +12,8 @@ public enum Operator implements TypedElement {
     DIVISION        ("/", Type.INT, Type.INT, Type.INT),
     MODULUS         ("%", Type.INT, Type.INT, Type.INT),
 
+    UMINUS  ("-", Type.INT, Type.INT),
+
     LAND    ("&", Type.INT, Type.INT, Type.INT),
     LOR     ("|", Type.INT, Type.INT, Type.INT),
     LXOR    ("^", Type.INT, Type.INT, Type.INT),

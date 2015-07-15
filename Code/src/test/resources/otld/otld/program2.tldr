@@ -1,0 +1,16 @@
+City amsterdam;
+
+Begin depot;
+    Wagon a accepts int;
+    Wagon b accepts boolean;
+    Wagon a accepts int;
+End depot;
+
+Begin company;
+    Load 11235 into wagon a;
+    Transfer wagon a to wagon a;
+    Transfer wagon a to wagon b;
+End company;
+
+/* We should see a variable already declared error for a in depot
+and also a type mismatch error for transfering a to b */

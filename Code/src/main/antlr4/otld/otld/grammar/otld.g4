@@ -25,17 +25,19 @@ company     : 'Begin''company'';'code*'End''company'';'; // wraps main code
 code        : defcircle | ifcond | write | stop | load | transfer | transport | invert | unarymin;
 
 //Conditionals
-defcircle   : 'Begin' 'circle' ID ';' code 'End' 'circle' ';'; // define execution code for conditional
-ifcond      : 'Approach' 'signal' ID ';' ('Case' BOOLEAN ':' code )+ 'Pass' 'signal' ';';
+defcircle   : 'Begin' 'circle' ID ';' code+ 'End' 'circle' ';'; // define execution code for conditional
+ifcond      : 'Approach' 'signal' ID ';' ifcondcase+ 'Pass' 'signal' ';';
+ifcondcase  : 'Case' BOOLEAN ':' code ;
 
 //Execute statements
-write       : 'Write' STRING 'to' 'journal' ';'; //print statement
+input       : 'Ask control' STRING 'about' ('contents of' ID)|('status of' ID)';';
+write       : 'Write' STRING ID 'to' 'journal' ';'; //print statement
 stop        : ' Stop'';';
 
 //Assign statements
 load        : 'Load' (INTEGER|BOOLEAN|CHARACTER) 'into' 'wagon' ID';';
 transfer    : 'Transfer' 'wagon' ID 'to' 'wagon' ID';';
-transport   : 'Transport' ID(','ID)* 'to' 'factory' (OP|ID) 'and' (('fully' 'load')|('set' 'signal')) ID';';
+transport   : 'Transport' ID(','ID)* 'to' 'factory' ID 'and' (('fully' 'load')|('set' 'signal')) ID';';
 invert      : 'Switch' 'signal' ID';';
 unarymin    : 'Turn' 'wagon' ID 'around'';';
 
@@ -46,11 +48,8 @@ CARGO       : ('int'|'boolean'|'char');
 INTEGER     : '-'?('0'|[1-9][0-9]*);
 STRING      : '"' ~["]* ('"' '"' ~["]*)* '"';
 CHARACTER   : '\''[a-zA-Z0-9]'\'';
-ID          : [a-z][a-zA-Z0-9]*;
-
-// All Operator Tokens
-OP          : 'add'|'substract'|'multiply'|'divide'|'modulo'|'complt'|'compgt'|'complte'|'compgte'|'compeq'|'and'|'or';
-
+ID          : [a-zA-Z][a-zA-Z0-9]*;
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;
+COMMENT : '/*' .*? '*/' -> skip;
