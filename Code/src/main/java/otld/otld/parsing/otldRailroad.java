@@ -73,11 +73,15 @@ public class otldRailroad extends otldBaseListener {
         Variable returnVar = null;
         if (id.startsWith("platform")) {
             if (lastFunction != null) {
-                int index = Integer.parseInt(id.substring(7));
-                Variable[] platforms = lastFunction.getVariables();
+                try {
+                    int index = Integer.parseInt(id.substring(7));
+                    Variable[] platforms = lastFunction.getVariables();
 
-                if (index < platforms.length && index > 0) {
-                    returnVar = platforms[index - 1];
+                    if (index <= platforms.length && index > 0) {
+                        returnVar = platforms[index - 1];
+                    }
+                } catch (NumberFormatException e) {
+                   //let returnVar remain null and have calling visitor throw an error
                 }
             }
         } else {
@@ -365,13 +369,13 @@ public class otldRailroad extends otldBaseListener {
 
     @Override
     public void enterTransport(otldParser.TransportContext ctx) {
-        ArrayList<Type> vars = new ArrayList<>(ctx.ID().size());
+        ArrayList<Variable> vars = new ArrayList<>(ctx.ID().size());
 
         //Check if all of the provided arguments exist
         for (TerminalNode node : ctx.ID()) {
             if (getVariable(node.getText()) != null) {
                 if (!node.equals(ctx.ID().get(-2))) {
-                    vars.add(getType(node.getText()));
+                    vars.add(getVariable(node.getText()));
                 }
             } else {
                 errors.add(new Error(ctx.ID().get(ctx.ID().indexOf(node)).getSymbol().getLine(),
@@ -380,13 +384,14 @@ public class otldRailroad extends otldBaseListener {
             }
         }
 
+        //Second to last variable is the name of the called function
         String functionID = ctx.ID().get(ctx.ID().size() - 2).getText();
         Application appl;
 
         switch (functionID) {
-            case "ADDITION":
+            case "addition":
                 try {
-                    appl = new Application(Operator.valueOf("ADDITION"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.ADDITION, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -394,9 +399,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "SUBTRACTION":
+            case "subtraction":
                 try {
-                    appl = new Application(Operator.valueOf("SUBTRACTION"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.SUBTRACTION, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -404,9 +409,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "MULTIPLICATION":
+            case "multiplication":
                 try {
-                    appl = new Application(Operator.valueOf("MULTIPLICATION"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.MULTIPLICATION, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -414,9 +419,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "DIVISION":
+            case "division":
                 try {
-                    appl = new Application(Operator.valueOf("DIVISION"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.DIVISION, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -424,9 +429,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "MODULUS":
+            case "modulus":
                 try {
-                    appl = new Application(Operator.valueOf("MODULUS"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.MODULUS, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -434,9 +439,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "UMINUS":
+            case "uminus":
                 try {
-                    appl = new Application(Operator.valueOf("UMINUS"), (Variable[]) vars.toArray());
+                    appl = new Application(vars.get(0).getType() == Type.BOOL ? Operator.NOT : Operator.UMINUS, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -444,9 +449,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "LAND":
+            case "land":
                 try {
-                    appl = new Application(Operator.valueOf("LAND"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.LAND, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -454,9 +459,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "LOR":
+            case "lor":
                 try {
-                    appl = new Application(Operator.valueOf("LOR"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.LOR, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -464,9 +469,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "LXOR":
+            case "lxor":
                 try {
-                    appl = new Application(Operator.valueOf("LXOR"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.LXOR, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -474,9 +479,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "AND":
+            case "and":
                 try {
-                    appl = new Application(Operator.valueOf("AND"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.AND, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -484,9 +489,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "OR":
+            case "or":
                 try {
-                    appl = new Application(Operator.valueOf("OR"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.OR, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -494,9 +499,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "NOT":
+            case "not":
                 try {
-                    appl = new Application(Operator.valueOf("NOT"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.NOT, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -504,9 +509,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "COMPLTE":
+            case "complte":
                 try {
-                    appl = new Application(Operator.valueOf("COMPLTE"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.COMPLTE, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -514,9 +519,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "COMPGTE":
+            case "compgte":
                 try {
-                    appl = new Application(Operator.valueOf("COMPGTE"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.COMPGTE, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -524,9 +529,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "COMPLT":
+            case "complt":
                 try {
-                    appl = new Application(Operator.valueOf("COMPLT"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.COMPLT, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -534,9 +539,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "COMPGT":
+            case "compgt":
                 try {
-                    appl = new Application(Operator.valueOf("COMPGT"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.COMPGT, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -544,9 +549,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "EQUALS":
+            case "equals":
                 try {
-                    appl = new Application(Operator.valueOf("EQUALS"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.EQUALS, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),
@@ -554,9 +559,9 @@ public class otldRailroad extends otldBaseListener {
                             ErrorMsg.TYPEMISMATCH.getMessage()));
                 }
                 break;
-            case "NEQUALS":
+            case "nequals":
                 try {
-                    appl = new Application(Operator.valueOf("NEQUALS"), (Variable[]) vars.toArray());
+                    appl = new Application(Operator.NEQUALS, (Variable[]) vars.toArray());
                     stack.peek().add(appl);
                 } catch (TypeMismatch typeMismatch) {
                     errors.add(new Error(ctx.ID().get(0).getSymbol().getLine(),

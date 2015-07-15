@@ -52,4 +52,4 @@ ID          : [a-zA-Z0-9]*;
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;
-COMMENT : '/*' .* '*/' -> skip;
+COMMENT : '/*' .*? '*/' -> skip;
