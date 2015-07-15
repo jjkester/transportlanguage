@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Syntax Error listener for the otld parser.
  */
-public class otldErrorListener extends BaseErrorListener {
+public class OTLDErrorListener extends BaseErrorListener {
     /** List of encountered syntax errors. */
     private List<Error> errors;
 
-    public otldErrorListener() {
+    public OTLDErrorListener() {
         this.errors = new ArrayList<>();
     }
 

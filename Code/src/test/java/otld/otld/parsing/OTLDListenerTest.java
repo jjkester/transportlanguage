@@ -10,14 +10,14 @@ import java.io.InputStream;
 import static org.junit.Assert.*;
 
 /**
- * Unit tests for otldRailroad visitor
+ * Unit tests for OTLDListener visitor
  */
-public class otldRailroadTest {
+public class OTLDListenerTest {
 
     @Test
     public void testGetType() throws Exception {
         /** Test railroad */
-        otldRailroad rail = new otldRailroad();
+        OTLDListener rail = new OTLDListener();
 
         /** Correct input */
         String bool = "boolean";
@@ -44,7 +44,7 @@ public class otldRailroadTest {
     @Test
     public void testGetArrType() throws Exception {
         /** Test railroad */
-        otldRailroad rail = new otldRailroad();
+        OTLDListener rail = new OTLDListener();
 
         /** Correct input */
         String bool = "boolean";
@@ -74,8 +74,8 @@ public class otldRailroadTest {
      * Test the working of a valid otld program.
      */
     public void testProgram1() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program1.tldr").getPath());
-        otldRailroad railroad = otldRailroad.parseFile(stream);
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program1.tldr").getPath());
+        OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
         // If any errors occur Main should print them to the standard error output
@@ -127,8 +127,8 @@ public class otldRailroadTest {
      * a type mismatch error.
      */
     public void testProgram2() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program2.tldr").getPath());
-        otldRailroad railroad = otldRailroad.parseFile(stream);
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program2.tldr").getPath());
+        OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
         // Verify that we indeed encounter errors
@@ -146,8 +146,8 @@ public class otldRailroadTest {
      * a type mismatch error.
      */
     public void testProgram3() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program3.tldr").getPath());
-        otldRailroad railroad = otldRailroad.parseFile(stream);
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program3.tldr").getPath());
+        OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
         // Verify that we indeed encounter errors
@@ -169,8 +169,8 @@ public class otldRailroadTest {
      * since syntax errors will stop the walking of the tree
      */
     public void testProgram4() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program4.tldr").getPath());
-        otldRailroad railroad = otldRailroad.parseFile(stream);
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program4.tldr").getPath());
+        OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
         // Verify that we indeed encounter errors
@@ -184,8 +184,8 @@ public class otldRailroadTest {
      * We expect a reserved name and factory undefined error
      */
     public void testProgram5() throws Exception {
-        InputStream stream = new FileInputStream(otldRailroadTest.class.getResource("program5.tldr").getPath());
-        otldRailroad railroad = otldRailroad.parseFile(stream);
+        InputStream stream = new FileInputStream(OTLDListenerTest.class.getResource("program5.tldr").getPath());
+        OTLDListener railroad = OTLDListener.parseFile(stream);
         Program city = railroad.getProgram();
 
         // Verify that we indeed encounter errors
