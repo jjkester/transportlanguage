@@ -7,6 +7,7 @@ package otld.otld.intermediate;
  * behaviour.
  *
  * {@code ANY} should only be used for operators.
+ * {@code BOOLARR}, {@code INTARR}, {@code CHARARR} are not fully supported.
  */
 public enum Type {
     ANY,

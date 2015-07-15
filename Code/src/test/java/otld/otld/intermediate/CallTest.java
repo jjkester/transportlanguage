@@ -32,7 +32,7 @@ public class CallTest {
         Variable v = Variable.create(Type.INT, "v", "10");
         Variable w = Variable.create(Type.INT, "w", null);
         Call c = new Call(f, v, w);
-        assertEquals(w, c.getVariable());
+        assertEquals(w, c.getDestination());
     }
 
     @Test(expected = TypeMismatch.class)

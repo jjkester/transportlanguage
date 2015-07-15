@@ -192,7 +192,7 @@ public class BytecodeCompiler extends Compiler {
         this.visitOperator(application.getOperator());
 
         // Store result
-        this.visitStoreVariable(application.getVariable());
+        this.visitStoreVariable(application.getDestination());
     }
 
     /**
@@ -276,10 +276,10 @@ public class BytecodeCompiler extends Compiler {
         }
 
         // Execute method and put result on stack
-        this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, this.program.getId(), call.getFunction().getId(), ASM.getASMMethodType(call.getFunction().getType(), call.getFunction().getArgs()).getDescriptor(), false);
+        this.methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, this.program.getId(), call.getFunction().getId(), ASM.getASMMethodType(call.getFunction().getType(), call.getFunction().getArgTypes()).getDescriptor(), false);
 
         // Store result in variable
-        this.visitStoreVariable(call.getVariable());
+        this.visitStoreVariable(call.getDestination());
     }
 
     /**
@@ -344,7 +344,7 @@ public class BytecodeCompiler extends Compiler {
         }
 
         // Create new method
-        this.methodVisitor = this.visitor.visitMethod(Opcodes.ACC_PUBLIC, function.getId(), ASM.getASMMethodType(function.getType(), function.getArgs()).getDescriptor(), null, null);
+        this.methodVisitor = this.visitor.visitMethod(Opcodes.ACC_PUBLIC, function.getId(), ASM.getASMMethodType(function.getType(), function.getArgTypes()).getDescriptor(), null, null);
 
         // Start method body
         this.methodVisitor.visitCode();

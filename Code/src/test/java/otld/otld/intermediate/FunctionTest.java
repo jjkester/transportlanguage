@@ -1,7 +1,6 @@
 package otld.otld.intermediate;
 
 import org.junit.Test;
-import otld.otld.intermediate.exceptions.TypeMismatch;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +29,7 @@ public class FunctionTest {
     public void testGetArgs() throws Exception {
         Function f = new Function("f", Type.INT, Type.BOOL, Type.CHAR);
         Type[] args = {Type.INT, Type.BOOL};
-        assertArrayEquals(args, f.getArgs());
+        assertArrayEquals(args, f.getArgTypes());
     }
 
     @Test

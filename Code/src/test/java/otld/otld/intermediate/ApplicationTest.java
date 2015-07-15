@@ -30,7 +30,7 @@ public class ApplicationTest {
         Variable v = Variable.create(Type.INT, "v", "10");
         Variable w = Variable.create(Type.INT, "w", "5");
         Application a = new Application(Operator.ADDITION, v, w, v);
-        assertEquals(v, a.getVariable());
+        assertEquals(v, a.getDestination());
     }
 
     @Test(expected = TypeMismatch.class)

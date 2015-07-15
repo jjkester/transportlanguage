@@ -90,7 +90,7 @@ public class OTLDListenerTest {
         assertEquals(Type.INT,  city.getVariable("d").getType());
 
         assertEquals(Type.BOOL, city.getFunction("notLessThanOrEquals").getType());
-        assertEquals(2, city.getFunction("notLessThanOrEquals").getArgs().length);
+        assertEquals(2, city.getFunction("notLessThanOrEquals").getArgTypes().length);
 
         // Validate if all the operations indeed occur in the order that we expect them
         assertTrue(city.getBody().getFirst() instanceof ValueAssignment);
