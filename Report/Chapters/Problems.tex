@@ -1,0 +1,13 @@
+\chapter{Problems and solutions}
+
+\section{Java Virtual Machine}
+\label{subj:asm}
+
+We decided to build our language for the Java Virtual Machine.
+This meant that we had to get to know Java bytecode.
+We found that the way bytecode works is easy to understand, however, writing a correct Java class file is a lot trickier.
+
+To tackle this problem we used the ASM library from ObjectWeb (\url{http://asm.ow2.org/}).
+This library provides a class for programmatically writing Java classes using a visitor pattern.
+This simplified bytecode generation a whole lot since it takes care of the structure of the file, including class, field an method definitions.
+We still had to use Java opcodes to build the method bodies, but the frames are computed automatically by the library.

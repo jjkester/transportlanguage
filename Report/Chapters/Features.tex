@@ -1,0 +1,34 @@
+\chapter{Language features}
+
+This chapter provides a quick description of the main features of Open Transport Language Deluxe (OTLD).
+
+OTLD supports boolean, integer and character types.
+All these types can be used as arguments for functions, read from input and written to output.
+
+\begin{itemize}
+\item \textbf{Basic expression language}
+	\begin{itemize}
+	\item Variables using \emph{wagons}
+	\item Single operator expressions using \emph{transports} and predefined \emph{factories}
+		\begin{itemize}
+		\item Unary minus (integers)
+		\item Unary not (booleans)
+		\item Multiplication, division, modulo division (integers)
+		\item Addition, subtraction (integers)
+		\item Equality \code{<}, \code{<=}, \code{>=}, \code{>} (integers)
+		\item Equality \code{==}, \code{!=} (all types)
+		\item (Logical) and, or (integers, booleans)
+		\end{itemize}
+	\end{itemize}
+\item \textbf{\code{if} and \code{while}}
+	\begin{itemize}
+	\item \code{if} / \code{else} blocks for branches through \emph{signals}
+	\item \code{while} loops through \emph{waypoints}
+	\end{itemize}
+\item \textbf{Procedures and functions}
+	\begin{itemize}
+	\item Non-nested, Java-like functions though \emph{factories}
+	\item Read from standard input through \emph{ceo}
+	\item Write to standard output through \emph{journal}
+	\end{itemize}
+\end{itemize}
