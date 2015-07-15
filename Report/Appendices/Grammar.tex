@@ -33,7 +33,7 @@ defwaypoint : 'Waypoint' ID ';' 'Begin' 'waypoint' ';' code+ 'End' 'waypoint' ';
 company     : 'Begin' 'company' ';' code* 'End' 'company' ';';
 
 // Things that form the program
-code        : defcircle | ifcond | write | stop | load | transfer | transport | invert | unarymin;
+code        : defcircle | ifcond | input | write | stop | load | transfer | transport | invert | unarymin;
 
 // Loop
 defcircle   : 'Begin' 'circle' ID ';' code+ 'End' 'circle' ';';
